@@ -1,4 +1,4 @@
-package sodabase.services;
+package databasesquared.services;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
