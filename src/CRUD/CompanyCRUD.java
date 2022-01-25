@@ -8,4 +8,8 @@ public class CompanyCRUD {
 		this.dbService = dbService;
 		// TODO Auto-generated constructor stub
 	}
+	
+	public boolean updateCompany() {
+		return false;
+	}
 }

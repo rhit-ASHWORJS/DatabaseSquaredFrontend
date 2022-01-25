@@ -7,4 +7,8 @@ public class ReviewerCRUD {
 		this.dbService = dbService;
 		// TODO Auto-generated constructor stub
 	}
+	
+	public boolean updateReviewer() {
+		return false;
+	}
 }
