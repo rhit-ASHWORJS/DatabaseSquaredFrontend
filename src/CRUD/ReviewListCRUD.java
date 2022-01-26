@@ -1,4 +1,5 @@
 package CRUD;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import databasesquared.services.DatabaseConnectionService;
@@ -19,7 +20,7 @@ public class ReviewListCRUD {
 	public boolean deleteReviewList() {
 		return false;
 	}
-	public ArrayList<String> getReviewList(){
+	public ResultSet getReviewList(){
 		return null;
 	}
 }

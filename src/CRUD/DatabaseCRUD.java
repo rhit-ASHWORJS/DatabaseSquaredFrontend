@@ -16,15 +16,25 @@ public class DatabaseCRUD {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public boolean addDatabase(String name, String DBMSName, String description, Date date, int tableCount) {
+	/**
+	 * adds a database to to the table
+	 * @param name
+	 * @param DBMSName
+	 * @param tableCount
+	 * @param date
+	 * @param description
+	 * @return ID of added database, -1 if did not work
+	 */
+	public int addDatabase(String name, String DBMSName,  int tableCount,  Date date,String description) {
 		try {
-			CallableStatement cs = dbService.getConnection().prepareCall("? = call addDatabase(?,?,?,?,?)");
+			CallableStatement cs = dbService.getConnection().prepareCall("? = call addDatabase(?,?,?,?,?,?)");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setString(2, name);
 			cs.setString(3, DBMSName);
-			cs.setString(4, description);
+			cs.setInt(4, tableCount);
 			cs.setDate(5, date);
-			cs.setInt(6, tableCount);
+			cs.setString(6, description);
+			cs.registerOutParameter(7, Types.INTEGER);
 			cs.execute();
 			int returnValue = cs.getInt(1);
 			switch (returnValue) {
@@ -32,25 +42,31 @@ public class DatabaseCRUD {
 				System.out.println("addDatabase error 1");
 				break;
 			default:
-				return true;
+				return cs.getInt(7);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();	
 		}
-		return false;
+		return -1;
 	}
 	
-	public boolean updateDatabase(int id, String name, String DBMSName, String description, Date date, int tableCount) {
+	/**
+	 * update info on a database 
+	 * @param id
+	 * @param name
+	 * @param description
+	 * @param tableCount
+	 * @return true if successful 
+	 */
+	public boolean updateDatabase(int id, String name, String description, int tableCount) {
 		try {
-			CallableStatement cs = dbService.getConnection().prepareCall("? = call updateDatabase(?,?,?,?,?,?)");
+			CallableStatement cs = dbService.getConnection().prepareCall("? = call updateDatabase(?,?,?,?)");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setInt(2, id);
 			cs.setString(3, name);
-			cs.setString(4, DBMSName);
-			cs.setString(5, description);
-			cs.setDate(6, date);
-			cs.setInt(7, tableCount);
+			cs.setString(4, description);
+			cs.setInt(5, tableCount);
 			cs.execute();
 			int returnValue = cs.getInt(1);
 			switch (returnValue) {
@@ -66,6 +82,12 @@ public class DatabaseCRUD {
 		}
 		return false;
 	}
+	
+	/**
+	 * deletes a database from the table
+	 * @param id
+	 * @return true if successful
+	 */
 	public boolean deleteDatabase(int id) {
 		try {
 			CallableStatement cs = dbService.getConnection().prepareCall("? = call deleteDatabase(?)");
@@ -86,7 +108,15 @@ public class DatabaseCRUD {
 		}
 		return false;
 	}
-	public ArrayList<String> getDatabase(int id){
+	
+	
+	/**
+	 * gets a database entry from the table 
+	 * @apiNote THIS IS NOT YET A STORED PROC IN THE DATABASE
+	 * @param id
+	 * @return ResultSet, 
+	 */
+	public ResultSet getDatabase(int id){
 		try {
 			CallableStatement cs = dbService.getConnection().prepareCall("? = call getDatabase(?)");
 			cs.registerOutParameter(1, Types.INTEGER);
@@ -98,7 +128,7 @@ public class DatabaseCRUD {
 				System.out.println("deleteDatabase error 1");
 				break;
 			default:
-				return convertSet(rs);
+				return rs;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -107,6 +137,7 @@ public class DatabaseCRUD {
 		return null;
 	}
 
+	//may make public, will do when output is finalized
 	private ArrayList<String> convertSet(ResultSet rs) {
 		ArrayList<String> list = new ArrayList<>();
 		try {
