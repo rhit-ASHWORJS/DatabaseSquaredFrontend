@@ -29,7 +29,7 @@ public class DatabaseCRUD {
 	 */
 	public int addDatabase(String name, String DBMSName, int tableCount, Date date, String description) {
 		try {
-			CallableStatement cs = dbService.getConnection().prepareCall("? = call addDatabase(?,?,?,?,?,?)");
+			CallableStatement cs = dbService.getConnection().prepareCall("{? = call addDatabase(?,?,?,?,?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setString(2, name);
 			cs.setString(3, DBMSName);
@@ -68,7 +68,7 @@ public class DatabaseCRUD {
 	 */
 	public boolean updateDatabase(int id, String name, String description, int tableCount) {
 		try {
-			CallableStatement cs = dbService.getConnection().prepareCall("? = call updateDatabase(?,?,?,?)");
+			CallableStatement cs = dbService.getConnection().prepareCall("{? = call updateDatabase(?,?,?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setInt(2, id);
 			if(name == null) {
@@ -110,7 +110,7 @@ public class DatabaseCRUD {
 	 */
 	public boolean deleteDatabase(int id) {
 		try {
-			CallableStatement cs = dbService.getConnection().prepareCall("? = call deleteDatabase(?)");
+			CallableStatement cs = dbService.getConnection().prepareCall("{? = call deleteDatabase(?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setInt(2, id);
 			cs.execute();
@@ -137,24 +137,26 @@ public class DatabaseCRUD {
 	 * @return ResultSet,
 	 */
 	public ResultSet getDatabase(int id) {
-		try {
-			CallableStatement cs = dbService.getConnection().prepareCall("? = call getDatabase(?)");
-			cs.registerOutParameter(1, Types.INTEGER);
-			cs.setInt(2, id);
-			ResultSet rs = cs.executeQuery();
-			int returnValue = cs.getInt(1);
-			switch (returnValue) {
-			case 1:
-				System.out.println("deleteDatabase error 1");
-				break;
-			default:
-				return rs;
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		return null;
+//		try {
+//			CallableStatement cs = dbService.getConnection().prepareCall("{? = call getDatabase(?)}");
+//			cs.registerOutParameter(1, Types.INTEGER);
+//			cs.setInt(2, id);
+//			cs.execute();
+//			int returnValue = cs.getInt(1);
+//			ResultSet rs = cs.executeQuery();
+//			switch (returnValue) {
+//			case 1:
+//				System.out.println("deleteDatabase error 1");
+//				break;
+//			default:
+//				return rs;
+//			}
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		return null;
 	}
 
 	/**

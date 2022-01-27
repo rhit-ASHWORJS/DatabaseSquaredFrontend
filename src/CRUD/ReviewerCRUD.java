@@ -20,7 +20,7 @@ public class ReviewerCRUD {
 	 */
 	public boolean addReviewer(String Username, Date YoE) {
 		try {
-			CallableStatement cs = dbService.getConnection().prepareCall("? = call addReviewer(?,?)");
+			CallableStatement cs = dbService.getConnection().prepareCall("{? = call addReviewer(?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setString(2, Username);
 			cs.setDate(3, YoE);

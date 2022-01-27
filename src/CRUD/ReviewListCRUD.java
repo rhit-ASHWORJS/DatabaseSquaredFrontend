@@ -23,16 +23,14 @@ public class ReviewListCRUD {
 	 */
 	public int addReviewList(String reviewer, String listName, Date dateCreated) {
 		try {
-			CallableStatement cs = dbService.getConnection().prepareCall("? = call addReviewList(?,?,?,?)");
+			CallableStatement cs = dbService.getConnection().prepareCall("{? = call addReviewList(?,?,?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setString(2, reviewer);
-			cs.setString(3, listName);
-			if(dateCreated == null) {
-				cs.setNull(4, Types.NULL);
-			}else {				
-				cs.setDate(4, dateCreated);
-			}
+			cs.setString(3, listName);			
+			cs.setDate(4, dateCreated);
 			cs.registerOutParameter(5, Types.INTEGER);
+			
+			System.out.println(cs.toString());
 			cs.execute();
 			int returnValue = cs.getInt(1);
 			switch (returnValue) {
@@ -40,7 +38,7 @@ public class ReviewListCRUD {
 				System.out.println("addReviewList error 1");
 				break;
 			default:
-				return cs.getInt(6);
+				return cs.getInt(5);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -57,7 +55,7 @@ public class ReviewListCRUD {
 	 */
 	public boolean updateReviewList(String username, int RLID, String name) {
 		try {
-			CallableStatement cs = dbService.getConnection().prepareCall("? = call updateReviewList(?,?,?)");
+			CallableStatement cs = dbService.getConnection().prepareCall("{? = call updateReviewList(?,?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setString(2, username);
 			cs.setInt(3, RLID);
@@ -85,7 +83,7 @@ public class ReviewListCRUD {
 	 */
 	public boolean deleteReviewList(String username, int RLID) {
 		try {
-			CallableStatement cs = dbService.getConnection().prepareCall("? = call deleteReviewList(?,?)");
+			CallableStatement cs = dbService.getConnection().prepareCall("{? = call deleteReviewList(?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setString(2, username);
 			cs.setInt(3, RLID);
@@ -111,11 +109,12 @@ public class ReviewListCRUD {
 	 */
 	public ResultSet getReviewList(String username){
 		try {
-			CallableStatement cs = dbService.getConnection().prepareCall("? = call getReviewList(?)");
+			CallableStatement cs = dbService.getConnection().prepareCall("{? = call getReviewList(?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setString(2, username);
-			ResultSet rs = cs.executeQuery();
+			cs.execute();
 			int returnValue = cs.getInt(1);
+			ResultSet rs = cs.executeQuery();
 			switch (returnValue) {
 			case 1:
 				System.out.println("getReviewList error 1");

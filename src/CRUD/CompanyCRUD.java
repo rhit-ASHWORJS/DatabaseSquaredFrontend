@@ -2,6 +2,7 @@ package CRUD;
 
 import java.sql.CallableStatement;
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -24,7 +25,7 @@ public class CompanyCRUD {
 	 */
 	public int addCompany(String name, int numEmployees, Date dateFounded) {
 		try {
-			CallableStatement cs = dbService.getConnection().prepareCall("? = call addCompany(?,?,?,?)");
+			CallableStatement cs = dbService.getConnection().prepareCall("{? = call addCompany(?,?,?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setString(2, name);
 			cs.setInt(3, numEmployees);
@@ -55,7 +56,7 @@ public class CompanyCRUD {
 	 */
 	public boolean updateCompanyInfo(int id, String name, int numEmployees) {
 		try {
-			CallableStatement cs = dbService.getConnection().prepareCall("? = call updateCompanyInfo(?,?,?)");
+			CallableStatement cs = dbService.getConnection().prepareCall("{? = call updateCompanyInfo(?,?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setInt(2, id);
 			if(name == null) {
@@ -91,11 +92,12 @@ public class CompanyCRUD {
 	 */
 	public ResultSet getCompanyInfo(int id) {
 		try {
-			CallableStatement cs = dbService.getConnection().prepareCall("? = call getCompanyInfo(?)");
+			CallableStatement cs = dbService.getConnection().prepareCall("{? = call getCompanyInfo(?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setInt(2, id);
-			ResultSet r = cs.executeQuery();
+			cs.execute();
 			int returnValue = cs.getInt(1);
+			ResultSet r = cs.executeQuery();
 			switch (returnValue) {
 			case 1:
 				System.out.println("getCompanyInfo error 1");
@@ -103,6 +105,7 @@ public class CompanyCRUD {
 			default:
 				return r;
 			}
+			return r;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();	

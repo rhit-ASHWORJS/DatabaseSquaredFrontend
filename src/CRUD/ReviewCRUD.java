@@ -24,7 +24,7 @@ public class ReviewCRUD {
 	 */
 	public boolean addReview(String username, int RLID, String DBMS, double score, String reviewText) {
 		try {
-			CallableStatement cs = dbService.getConnection().prepareCall("? = call addReview(?,?,?,?,?)");
+			CallableStatement cs = dbService.getConnection().prepareCall("{? = call addReview(?,?,?,?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setString(2, username);
 			cs.setInt(3, RLID);
@@ -62,7 +62,7 @@ public class ReviewCRUD {
 	 */
 	public boolean updateReview(String username, int RLID, String DBMS, double score,String reviewText) {
 		try {
-			CallableStatement cs = dbService.getConnection().prepareCall("? = call updateReview(?,?,?,?,?)");
+			CallableStatement cs = dbService.getConnection().prepareCall("{? = call updateReview(?,?,?,?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setString(2, username);
 			cs.setInt(3, RLID);
@@ -101,7 +101,7 @@ public class ReviewCRUD {
 	 */
 	public boolean deleteReview(String username, int RLID, String DBMS) {
 		try {
-			CallableStatement cs = dbService.getConnection().prepareCall("? = call deleteReview(?)");
+			CallableStatement cs = dbService.getConnection().prepareCall("{? = call deleteReview(?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setString(2, username);
 			cs.setInt(3, RLID);
@@ -130,11 +130,12 @@ public class ReviewCRUD {
 	 */
 	public ResultSet getReviews(String username){
 		try {
-			CallableStatement cs = dbService.getConnection().prepareCall("? = call getReviews(?)");
+			CallableStatement cs = dbService.getConnection().prepareCall("{? = call getReviews(?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setString(2, username);
-			ResultSet rs = cs.executeQuery();
+			cs.execute();
 			int returnValue = cs.getInt(1);
+			ResultSet rs = cs.executeQuery();
 			switch (returnValue) {
 			case 1:
 				System.out.println("getReviews error 1");
@@ -178,10 +179,11 @@ public class ReviewCRUD {
 	 */
 	public ResultSet getListedReviews() {
 		try {
-			CallableStatement cs = dbService.getConnection().prepareCall("? = call getListedReviews()");
+			CallableStatement cs = dbService.getConnection().prepareCall("{? = call getListedReviews()}");
 			cs.registerOutParameter(1, Types.INTEGER);
-			ResultSet rs = cs.executeQuery();
+			cs.execute();
 			int returnValue = cs.getInt(1);
+			ResultSet rs = cs.executeQuery();
 			switch (returnValue) {
 			case 1:
 				System.out.println("getListedReviews error 1");
