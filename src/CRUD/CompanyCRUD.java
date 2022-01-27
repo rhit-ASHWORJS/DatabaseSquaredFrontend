@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
 
 import databasesquared.services.DatabaseConnectionService;
 
@@ -48,8 +49,8 @@ public class CompanyCRUD {
 	/**
 	 *  update a company info
 	 * @param id
-	 * @param name
-	 * @param numEmployees
+	 * @param name can be null
+	 * @param numEmployees -1 for null 
 	 * @return true if successfull 
 	 */
 	public boolean updateCompanyInfo(int id, String name, int numEmployees) {
@@ -57,8 +58,16 @@ public class CompanyCRUD {
 			CallableStatement cs = dbService.getConnection().prepareCall("? = call updateCompanyInfo(?,?,?)");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setInt(2, id);
-			cs.setString(3, name);
-			cs.setInt(4, numEmployees);
+			if(name == null) {
+				cs.setNull(3, Types.NULL);
+			}else {				
+				cs.setString(3, name);
+			}
+			if(numEmployees == -1) {
+				cs.setNull(4, Types.NULL);
+			}else {				
+				cs.setInt(4, numEmployees);
+			}
 			cs.execute();
 			int returnValue = cs.getInt(1);
 			switch (returnValue) {
@@ -99,5 +108,28 @@ public class CompanyCRUD {
 			e.printStackTrace();	
 		}
 		return null;
+	}
+	
+	/**
+	 * takes resultset and converts it
+	 * @param rs
+	 * @return String:Name, int:NEmployees, Date:DateFounded
+	 */
+	public ArrayList<ArrayList<String>> parseCompanyInfo(ResultSet rs){
+		ArrayList<ArrayList<String>> list = new ArrayList<>();
+		int index = 0;
+		try {
+			while(rs.next()) {
+				list.add(new ArrayList<>());
+				list.get(index).add(rs.getString(1));
+				list.get(index).add(rs.getInt(2)+"");
+				list.get(index).add(rs.getDate(3).toString());
+				index++;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
 	}
 }

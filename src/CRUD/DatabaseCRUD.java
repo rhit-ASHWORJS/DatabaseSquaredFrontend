@@ -11,21 +11,23 @@ import databasesquared.services.DatabaseConnectionService;
 
 public class DatabaseCRUD {
 	private DatabaseConnectionService dbService = null;
+
 	public DatabaseCRUD(DatabaseConnectionService dbService) {
 		this.dbService = dbService;
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	/**
 	 * adds a database to to the table
+	 * 
 	 * @param name
 	 * @param DBMSName
 	 * @param tableCount
 	 * @param date
-	 * @param description
+	 * @param description nullable
 	 * @return ID of added database, -1 if did not work
 	 */
-	public int addDatabase(String name, String DBMSName,  int tableCount,  Date date,String description) {
+	public int addDatabase(String name, String DBMSName, int tableCount, Date date, String description) {
 		try {
 			CallableStatement cs = dbService.getConnection().prepareCall("? = call addDatabase(?,?,?,?,?,?)");
 			cs.registerOutParameter(1, Types.INTEGER);
@@ -33,7 +35,11 @@ public class DatabaseCRUD {
 			cs.setString(3, DBMSName);
 			cs.setInt(4, tableCount);
 			cs.setDate(5, date);
-			cs.setString(6, description);
+			if(description == null) {
+				cs.setNull(6, Types.NULL);
+			}else {				
+				cs.setString(6, description);
+			}
 			cs.registerOutParameter(7, Types.INTEGER);
 			cs.execute();
 			int returnValue = cs.getInt(1);
@@ -46,27 +52,40 @@ public class DatabaseCRUD {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();	
+			e.printStackTrace();
 		}
 		return -1;
 	}
-	
+
 	/**
-	 * update info on a database 
+	 * update info on a database
+	 * 
 	 * @param id
-	 * @param name
-	 * @param description
-	 * @param tableCount
-	 * @return true if successful 
+	 * @param name nullable
+	 * @param description nullable 
+	 * @param tableCount -1 for null
+	 * @return true if successful
 	 */
 	public boolean updateDatabase(int id, String name, String description, int tableCount) {
 		try {
 			CallableStatement cs = dbService.getConnection().prepareCall("? = call updateDatabase(?,?,?,?)");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setInt(2, id);
-			cs.setString(3, name);
-			cs.setString(4, description);
-			cs.setInt(5, tableCount);
+			if(name == null) {
+				cs.setNull(3, Types.NULL);
+			}else {
+				cs.setString(3, name);
+			}
+			if(description == null) {
+				cs.setNull(4, Types.NULL);				
+			}else {
+				cs.setString(4, description);				
+			}
+			if(tableCount == -1) {
+				cs.setNull(5, Types.NULL);
+			}else {
+				cs.setInt(5, tableCount);				
+			}
 			cs.execute();
 			int returnValue = cs.getInt(1);
 			switch (returnValue) {
@@ -78,13 +97,14 @@ public class DatabaseCRUD {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();	
+			e.printStackTrace();
 		}
 		return false;
 	}
-	
+
 	/**
 	 * deletes a database from the table
+	 * 
 	 * @param id
 	 * @return true if successful
 	 */
@@ -104,19 +124,19 @@ public class DatabaseCRUD {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();	
+			e.printStackTrace();
 		}
 		return false;
 	}
-	
-	
+
 	/**
-	 * gets a database entry from the table 
+	 * gets a database entry from the table
+	 * 
 	 * @apiNote THIS IS NOT YET A STORED PROC IN THE DATABASE
 	 * @param id
-	 * @return ResultSet, 
+	 * @return ResultSet,
 	 */
-	public ResultSet getDatabase(int id){
+	public ResultSet getDatabase(int id) {
 		try {
 			CallableStatement cs = dbService.getConnection().prepareCall("? = call getDatabase(?)");
 			cs.registerOutParameter(1, Types.INTEGER);
@@ -132,23 +152,28 @@ public class DatabaseCRUD {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();	
+			e.printStackTrace();
 		}
 		return null;
 	}
 
-	//may make public, will do when output is finalized
-	private ArrayList<String> convertSet(ResultSet rs) {
-		ArrayList<String> list = new ArrayList<>();
+	/**
+	 * takes resultset and converts it
+	 * @param rs
+	 * @return
+	 */
+	private ArrayList<ArrayList<String>> convertSet(ResultSet rs) {
+		ArrayList<ArrayList<String>> list = new ArrayList<>();
+		int index = 0;
 		try {
-			while(rs.next()) {
-				StringBuilder sb = new StringBuilder();
-				sb.append(rs.getString(1));
-				sb.append(rs.getString(2));
-				sb.append(rs.getString(3));
-				sb.append(rs.getDate(4));
-				sb.append(rs.getInt(5));
-				sb.append("\n");
+			while (rs.next()) {
+				list.add(new ArrayList<>());
+				list.get(index).add(rs.getString(1));
+				list.get(index).add(rs.getString(2));
+				list.get(index).add(rs.getString(3));
+				list.get(index).add(rs.getDate(4).toString());
+				list.get(index).add(rs.getInt(5) + "");
+				index++;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

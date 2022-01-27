@@ -55,8 +55,8 @@ public class DBMSCRUD {
 	 * update a DMBS in the table 
 	 * @param name
 	 * @param MID
-	 * @param language
-	 * @param type
+	 * @param language nullable
+	 * @param type nullable
 	 * @return true is successful
 	 */
 	public boolean updateDBMS(String name, int MID, String language, String type) {
@@ -65,8 +65,16 @@ public class DBMSCRUD {
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setString(2, name);
 			cs.setInt(3, MID);
-			cs.setString(4, language);
-			cs.setString(5, type);
+			if(language == null) {
+				cs.setNull(4, Types.NULL);
+			}else {
+				cs.setString(4, language);
+			}
+			if(type == null) {
+				cs.setNull(5, Types.NULL);
+			}else {
+				cs.setString(5, type);
+			}
 			cs.execute();
 			int returnValue = cs.getInt(1);
 			switch (returnValue) {

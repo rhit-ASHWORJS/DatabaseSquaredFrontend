@@ -132,6 +132,28 @@ public class ReviewCRUD {
 		}
 		return null;
 	}
+	/**
+	 * 
+	 * @param rs
+	 * @return String:DBMSName, double:Score, double:MaxScore, String:RatingSystem)
+	 */
+	public ArrayList<ArrayList<String>> parceReviews(ResultSet rs){
+		ArrayList<ArrayList<String>> list = new ArrayList<>();
+		int index = 0;
+		try {
+			while(rs.next()) {
+				list.add(new ArrayList<>());
+				list.get(index).add(rs.getString(1));
+				list.get(index).add(rs.getInt(2)+"");
+				list.get(index).add(rs.getDate(3).toString());
+				index++;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
+	}
 	
 	/**
 	 * default filter 
@@ -157,7 +179,26 @@ public class ReviewCRUD {
 		return null;
 	}
 	
-	public ArrayList<ArrayList<String>> parceResults(ResultSet rs){
-		return null;
+	/**
+	 * 
+	 * @param rs
+	 * @return Username, DBMS, Company, Score
+	 */
+	public ArrayList<ArrayList<String>> parceListedReviews(ResultSet rs){
+		ArrayList<ArrayList<String>> list = new ArrayList<>();
+		int index = 0;
+		try {
+			while(rs.next()) {
+				list.add(new ArrayList<>());
+				list.get(index).add(rs.getString(1));
+				list.get(index).add(rs.getInt(2)+"");
+				list.get(index).add(rs.getDate(3).toString());
+				index++;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
 	}
 }
