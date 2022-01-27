@@ -105,6 +105,7 @@ public class ReviewCRUD {
 		}
 		return false;
 	}
+	
 	/**
 	 * gets the reviews from a reviewer
 	 * @param username
@@ -133,7 +134,7 @@ public class ReviewCRUD {
 	}
 	
 	/**
-	 * 
+	 * default filter 
 	 * @return ResultSet Username, DBMS, Company, Score
 	 */
 	public ResultSet getListedReviews() {
@@ -153,6 +154,10 @@ public class ReviewCRUD {
 			// TODO Auto-generated catch block
 			e.printStackTrace();	
 		}
+		return null;
+	}
+	
+	public ArrayList<ArrayList<String>> parceResults(ResultSet rs){
 		return null;
 	}
 }

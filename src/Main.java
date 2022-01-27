@@ -7,6 +7,7 @@ public class Main {
 //		ApplicationRunner appRunner = new ApplicationRunner();
 //		appRunner.runApplication(args);
 		DatabaseConnectionService test = new DatabaseConnectionService("titan.csse.rose-hulman.edu","DatabaseSquared");
+		test.connect("dbSquareUser", "ilikedatabases");
 	}
 
 }
