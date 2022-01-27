@@ -135,7 +135,7 @@ public class ReviewListCRUD {
 	 * @param rs 
 	 * @return name, date created
 	 */
-	private ArrayList<ArrayList<String>> convertReviewList(ResultSet rs) {
+	public ArrayList<ArrayList<String>> parceReviewList(ResultSet rs) {
 		ArrayList<ArrayList<String>> list = new ArrayList<>();
 		int index = 0;
 		try {
