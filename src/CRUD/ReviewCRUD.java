@@ -19,16 +19,22 @@ public class ReviewCRUD {
 	 * @param RLID ReviewList ID
 	 * @param DBMS
 	 * @param score
+	 * @param reviewText can be null
 	 * @return true if successful
 	 */
-	public boolean addReview(String username, int RLID, String DBMS, double score) {
+	public boolean addReview(String username, int RLID, String DBMS, double score, String reviewText) {
 		try {
-			CallableStatement cs = dbService.getConnection().prepareCall("? = call addReview(?,?,?,?)");
+			CallableStatement cs = dbService.getConnection().prepareCall("? = call addReview(?,?,?,?,?)");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setString(2, username);
 			cs.setInt(3, RLID);
 			cs.setString(4, DBMS);
 			cs.setDouble(5, score);
+			if(reviewText == null) {
+				cs.setNull(6, Types.NULL);
+			}else {
+				cs.setString(6, reviewText);
+			}
 			cs.execute();
 			int returnValue = cs.getInt(1);
 			switch (returnValue) {
@@ -50,17 +56,27 @@ public class ReviewCRUD {
 	 * @param username
 	 * @param RLID ReviewList ID
 	 * @param DBMS
-	 * @param score
+	 * @param score -1 is null
+	 * @param reviewText can be null
 	 * @return true if successful 
 	 */
-	public boolean updateReview(String username, int RLID, String DBMS, double score) {
+	public boolean updateReview(String username, int RLID, String DBMS, double score,String reviewText) {
 		try {
-			CallableStatement cs = dbService.getConnection().prepareCall("? = call updateReview(?,?,?,?)");
+			CallableStatement cs = dbService.getConnection().prepareCall("? = call updateReview(?,?,?,?,?)");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setString(2, username);
 			cs.setInt(3, RLID);
 			cs.setString(4, DBMS);
-			cs.setDouble(5, score);
+			if(score == -1.0) {
+				cs.setNull(5, Types.NULL);
+			}else {
+				cs.setDouble(5, score);
+			}
+			if(reviewText == null) {
+				cs.setNull(6, Types.NULL);
+			}else {
+				cs.setString(6, reviewText);
+			}
 			cs.execute();
 			int returnValue = cs.getInt(1);
 			switch (returnValue) {
@@ -109,7 +125,7 @@ public class ReviewCRUD {
 	/**
 	 * gets the reviews from a reviewer
 	 * @param username
-	 * @return String:DBMSName, double:Score, double:MaxScore, String:RatingSystem)
+	 * @return String:DBMSName, double:Score, reviewText, ReviewList name
 
 	 */
 	public ResultSet getReviews(String username){
@@ -135,7 +151,7 @@ public class ReviewCRUD {
 	/**
 	 * 
 	 * @param rs
-	 * @return String:DBMSName, double:Score, double:MaxScore, String:RatingSystem)
+	 * @return String:DBMSName, double:Score, reviewText, ReviewList name
 	 */
 	public ArrayList<ArrayList<String>> parceReviews(ResultSet rs){
 		ArrayList<ArrayList<String>> list = new ArrayList<>();
@@ -144,8 +160,9 @@ public class ReviewCRUD {
 			while(rs.next()) {
 				list.add(new ArrayList<>());
 				list.get(index).add(rs.getString(1));
-				list.get(index).add(rs.getInt(2)+"");
-				list.get(index).add(rs.getDate(3).toString());
+				list.get(index).add(rs.getDouble(2)+"");
+				list.get(index).add(rs.getString(3));
+				list.get(index).add(rs.getString(4));
 				index++;
 			}
 		} catch (SQLException e) {
@@ -157,7 +174,7 @@ public class ReviewCRUD {
 	
 	/**
 	 * default filter 
-	 * @return ResultSet Username, DBMS, Company, Score
+	 * @return ResultSet Username, DBMS, Company, Score, reviewText
 	 */
 	public ResultSet getListedReviews() {
 		try {
@@ -182,7 +199,7 @@ public class ReviewCRUD {
 	/**
 	 * 
 	 * @param rs
-	 * @return Username, DBMS, Company, Score
+	 * @return Username, DBMS, Company, Score, reviewText
 	 */
 	public ArrayList<ArrayList<String>> parceListedReviews(ResultSet rs){
 		ArrayList<ArrayList<String>> list = new ArrayList<>();
@@ -191,8 +208,10 @@ public class ReviewCRUD {
 			while(rs.next()) {
 				list.add(new ArrayList<>());
 				list.get(index).add(rs.getString(1));
-				list.get(index).add(rs.getInt(2)+"");
-				list.get(index).add(rs.getDate(3).toString());
+				list.get(index).add(rs.getString(2));
+				list.get(index).add(rs.getString(3));
+				list.get(index).add(rs.getString(4));
+				list.get(index).add(rs.getString(5));
 				index++;
 			}
 		} catch (SQLException e) {

@@ -1,5 +1,6 @@
 package CRUD;
 import java.sql.CallableStatement;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Types;
 
@@ -17,12 +18,12 @@ public class ReviewerCRUD {
 	 * @param YoE
 	 * @return true if successful
 	 */
-	public boolean addReviewer(String Username, int YoE) {
+	public boolean addReviewer(String Username, Date YoE) {
 		try {
-			CallableStatement cs = dbService.getConnection().prepareCall("? = call addReviewer(?)");
+			CallableStatement cs = dbService.getConnection().prepareCall("? = call addReviewer(?,?)");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setString(2, Username);
-			cs.setInt(3, YoE);
+			cs.setDate(3, YoE);
 			cs.execute();
 			int returnValue = cs.getInt(1);
 			switch (returnValue) {

@@ -23,7 +23,7 @@ public class DBMSCRUD {
 	 * @param MID
 	 * @param language
 	 * @param type
-	 * @param dateCreated
+	 * @param dateCreated can be null
 	 * @return true is successful
 	 */
 	public boolean addDBMS(String name, int MID, String language, String type, Date dateCreated) {
@@ -34,7 +34,11 @@ public class DBMSCRUD {
 			cs.setInt(3, MID);
 			cs.setString(4, language);
 			cs.setString(5, type);
-			cs.setDate(6, dateCreated);
+			if(dateCreated == null) {
+				cs.setNull(6, Types.NULL);
+			}else {				
+				cs.setDate(6, dateCreated);
+			}
 			cs.execute();
 			int returnValue = cs.getInt(1);
 			switch (returnValue) {
