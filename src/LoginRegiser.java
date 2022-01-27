@@ -1,72 +1,94 @@
 import java.sql.CallableStatement;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-
+import java.util.Random;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
+import java.util.Base64;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 import databasesquared.services.DatabaseConnectionService;
 
 public class LoginRegiser {
-	//this should hold the place where we do the log in and register people
+	private static final Random RANDOM = new SecureRandom();
+	private static final Base64.Encoder enc = Base64.getEncoder();
+	private static final Base64.Decoder dec = Base64.getDecoder();
 	private DatabaseConnectionService dbService = null;
 	public LoginRegiser(DatabaseConnectionService dbService) {
 		this.dbService = dbService;
 		// TODO Auto-generated constructor stub
 	}
 
-	/**
-	 * have a reviewer log in
-	 * @param rUser
-	 * @param rPass
-	 * @return true if correct
-	 */
-	public boolean reviewerLogin(String rUser, String rPass) {
+	public boolean login(String username, String password) {
 		try {
-			CallableStatement cs = dbService.getConnection().prepareCall("? = call loginReviewer(?,?)");
-			cs.registerOutParameter(1, Types.INTEGER);
-			cs.setString(2, rUser);
-			cs.setString(3, rPass);
-			cs.execute();
-			int returnValue = cs.getInt(1);
-			switch (returnValue) {
-			case 1:
-				System.out.println("loginReviewer error 1");
-				break;
-			default:
+			PreparedStatement stmt = this.dbService.getConnection().prepareStatement("Select Salt, PasswordHash \n From [Reviewer] \n where Username = ?");
+			stmt.setString(1, username);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				byte[] salt = rs.getBytes(1);
+				String dbHash = rs.getString(2);
+				String hash = hashPassword(salt,password);
+				if(hash.compareTo(dbHash) == 0) {
+					return true;
+				}
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	public boolean register(String username, String password) {
+		//TODO: Task 6
+		byte[] salt = this.getNewSalt();
+		String hash = this.hashPassword(salt, password);
+		try {
+			CallableStatement stmt = this.dbService.getConnection().prepareCall("{? = call Register(?,?,?)}");
+			stmt.registerOutParameter(1,Types.INTEGER);
+			stmt.setString(2, username);
+			stmt.setBytes(3, salt);
+			stmt.setString(4, hash);
+			stmt.execute();
+			if(stmt.getInt(1) == 0) {
 				return true;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();	
+			e.printStackTrace();
 		}
 		return false;
 	}
 	
-	/**
-	 * have a reviewer register
-	 * @param rUser
-	 * @param rHash
-	 * @param rSalt
-	 * @return true is successful
-	 */
-	public boolean reviewerRegister(String rUser, String rHash, byte[] rSalt) {
+	public byte[] getNewSalt() {
+		byte[] salt = new byte[16];
+		RANDOM.nextBytes(salt);
+		return salt;
+	}
+	
+	public String getStringFromBytes(byte[] data) {
+		return enc.encodeToString(data);
+	}
+
+	public String hashPassword(byte[] salt, String password) {
+
+		KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
+		SecretKeyFactory f;
+		byte[] hash = null;
 		try {
-			CallableStatement cs = dbService.getConnection().prepareCall("? = call registerReviewer(?,?)");
-			cs.registerOutParameter(1, Types.INTEGER);
-			cs.setString(2, rUser);
-			cs.setString(3, rHash);
-			cs.setBytes(4, rSalt);
-			cs.execute();
-			int returnValue = cs.getInt(1);
-			switch (returnValue) {
-			case 1:
-				System.out.println("registerReviewer error 1");
-				break;
-			default:
-				return true;
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();	
+			f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+			hash = f.generateSecret(spec).getEncoded();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (InvalidKeySpecException e) {
+			e.printStackTrace();
 		}
-		return false;
+		return getStringFromBytes(hash);
 	}
 }
