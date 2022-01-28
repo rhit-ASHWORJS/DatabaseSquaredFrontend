@@ -69,6 +69,8 @@ public class FullCRUD {
 	public  ArrayList<ArrayList<String>> getReviews(String username){
 		return this.review.parceReviews(this.review.getReviews(username));
 	}
+	
+	public String[] getListedReviewsHeader = {"Username", "DBMS", "Company", "Score", "Review Text"};
 	public  ArrayList<ArrayList<String>> getListedReviews() {
 		return this.review.parceListedReviews(this.review.getListedReviews());
 	}
