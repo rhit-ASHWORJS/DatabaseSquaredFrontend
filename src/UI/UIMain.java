@@ -28,7 +28,7 @@ public class UIMain {
 		switch (result) {
 	        case JOptionPane.YES_OPTION:
 	        	System.out.println("Continue as Reviewer");
-	        	UILogin login = new UILogin();
+	        	UILogin login = new UILogin(fc);
 	        	login.setVisibility(true);
 	        break;
 	        case JOptionPane.NO_OPTION:

@@ -10,30 +10,35 @@ import java.awt.*;
 import java.awt.event.*;
 import java.lang.Exception;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Vector;
+import java.sql.Date;
 
-public class UIGuest extends JFrame {
+public class UIReviewList extends JFrame {
 	
 	JScrollPane dataPane;
 	JTable dataTable;
 	FullCRUD fc;
 	JComboBox reportTypes;
+	String username;
+	JTextField reviewListNameField;
 	
 	String[] dataViewOptions = {"Reviews", "DBMS", "Companies"};
 
 	public static final int MAXIMUM_FILTER_INPUT = 20;
-	UIGuest(FullCRUD fc) {
+	UIReviewList(FullCRUD fc, String username) {
+		this.username = username;
 		this.fc = fc;
 		this.setSize(800, 550);
-		this.setTitle("Guest View");
+		this.setTitle("Reviewer View");
 
 		// Make the header panel
 		JPanel headerPanel = new JPanel(new GridLayout(1, 2));
 		JLabel currentUserLabel = new JLabel();
-		currentUserLabel.setText("Current User: Guest");
+		currentUserLabel.setText("Current User: " + username);
 		currentUserLabel.setFont(new Font("Serif", Font.PLAIN, 20));
 		JLabel currentViewLabel = new JLabel();
-		currentViewLabel.setText("Current View: Data View");
+		currentViewLabel.setText("Current View: Review Lists View");
 		currentViewLabel.setFont(new Font("Serif", Font.PLAIN, 20));
 		headerPanel.add(currentUserLabel);
 		headerPanel.add(currentViewLabel);
@@ -46,22 +51,20 @@ public class UIGuest extends JFrame {
 		filtersLabel.setFont(new Font("Serif", Font.PLAIN, 20));
 		filterPanel.add(filtersLabel);
 		
-		filterPanel.add(new JLabel("Report Type"));
 		
-		reportTypes = new JComboBox(dataViewOptions);
-		filterPanel.add(reportTypes);
 		
-		filterPanel.add(new JLabel("DBMS"));
-		filterPanel.add(new JTextField(MAXIMUM_FILTER_INPUT));
-		filterPanel.add(new JLabel("Company"));
-		filterPanel.add(new JTextField(MAXIMUM_FILTER_INPUT));
-		filterPanel.add(new JLabel("Reviewer"));
-		filterPanel.add(new JTextField(MAXIMUM_FILTER_INPUT));
-		filterPanel.add(new JLabel("Minimum Score"));
-		filterPanel.add(new JTextField(MAXIMUM_FILTER_INPUT));
+		filterPanel.add(new JLabel("Review List Name"));
+		reviewListNameField = new JTextField(MAXIMUM_FILTER_INPUT);
+		filterPanel.add(reviewListNameField);
+//		filterPanel.add(new JLabel("Company"));
+//		filterPanel.add(new JTextField(MAXIMUM_FILTER_INPUT));
+//		filterPanel.add(new JLabel("Reviewer"));
+//		filterPanel.add(new JTextField(MAXIMUM_FILTER_INPUT));
+//		filterPanel.add(new JLabel("Minimum Score"));
+//		filterPanel.add(new JTextField(MAXIMUM_FILTER_INPUT));
 
 		// Make the data display panel
-		this.setDataReviews();
+		this.setDataReviewList();
 //		dataTable = new
 		// Make the interaction panel
 		JPanel interactionPanel = new JPanel();
@@ -71,6 +74,13 @@ public class UIGuest extends JFrame {
 		JButton csvButton = new JButton("GENERATE CSV REPORT");
 		csvButton.addActionListener(new CSVListener());
 		interactionPanel.add(csvButton);
+		JButton createReviewButton = new JButton("CREATE REVIEW LIST");
+		createReviewButton.addActionListener(new CreateReviewListener());
+		interactionPanel.add(createReviewButton);
+		JButton editReviewButton = new JButton("EDIT REVIEW LIST");
+		editReviewButton.addActionListener(new EditReviewListener());
+		interactionPanel.add(editReviewButton);
+		
 		// Put all the panels in the frame
 
 		add(headerPanel, BorderLayout.NORTH);
@@ -86,12 +96,16 @@ public class UIGuest extends JFrame {
 	}
 	
 	
-	private void setDataReviews() {
-		String[] cols = fc.getListedReviewsHeader;
-		ArrayList<ArrayList<String>> reviewsData = fc.getListedReviews();
+	private void setDataReviewList() {
+		String[] cols = fc.getReviewListHeader;
+		ArrayList<ArrayList<String>> reviewsData = fc.getReviewList(username);
 		//One-line Arraylist to string conversion found here: https://stackoverflow.com/questions/10043209/convert-arraylist-into-2d-array-containing-varying-lengths-of-arrays
 		String[][] data = reviewsData.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
 		this.setTableData(data, cols);
+	}
+	
+	private void refreshUI() {
+		this.pack();
 	}
 	
 	private void setTableData(String[][] data, String[] cols)
@@ -119,14 +133,26 @@ public class UIGuest extends JFrame {
 	class RefreshListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			String selected = reportTypes.getSelectedItem().toString();
-			System.out.println("REFRESH " + selected);
-
-			if(selected.equals("Reviews"))
-			{
-				setDataReviews();
-				
-			}
+			setDataReviewList();
 		}
+	}
+	
+	class CreateReviewListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			System.out.println(reviewListNameField.getText());
+			fc.addReviewList(username, reviewListNameField.getText(), new Date(Calendar.getInstance().getTimeInMillis()));
+			setDataReviewList();
+		}
+	}
+	
+	class EditReviewListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		
 	}
 }

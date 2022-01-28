@@ -1,6 +1,9 @@
 package UI;
 
-import javax.swing.*;  
+import javax.swing.*;
+
+import CRUD.FullCRUD;
+
 import java.awt.*;  
 import java.awt.event.*;  
 import java.lang.Exception;  
@@ -9,9 +12,11 @@ class UILogin extends JFrame
 {  
     JButton loginButton, registerButton;   
     JTextField  UsernameField, PasswordField;  
+    FullCRUD fc;
       
-    UILogin()  
+    UILogin(FullCRUD fc)  
     {     
+    	this.fc = fc;
     	this.setSize(300,200);
 
         //Create the panel for user input
@@ -60,7 +65,9 @@ class UILogin extends JFrame
     	@Override
     	public void actionPerformed(ActionEvent arg0) {
     		System.out.println("click");
-    		
+    		UIReviewer ui = new UIReviewer(fc, UsernameField.getText());
+    		ui.setVisibility(true);
+    		setVisibility(false);
     	}
     }
     

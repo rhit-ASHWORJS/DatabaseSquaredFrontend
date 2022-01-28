@@ -86,6 +86,8 @@ public class FullCRUD {
 	public boolean deleteReviewList(String username, int RLID) {
 		return this.reviewList.deleteReviewList(username, RLID);
 	}
+	
+	public String[] getReviewListHeader = {"Name", "Date Created"};
 	public  ArrayList<ArrayList<String>> getReviewList(String username){
 		return this.reviewList.parceReviewList(this.reviewList.getReviewList(username));
 	}
