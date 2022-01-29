@@ -50,11 +50,10 @@ public class LoginRegiser {
 		byte[] salt = this.getNewSalt();
 		String hash = this.hashPassword(salt, password);
 		try {
-			CallableStatement stmt = this.dbService.getConnection().prepareCall("{? = call Register(?,?,?)}");
+			CallableStatement stmt = this.dbService.getConnection().prepareCall("{? = call registerReviewer(?,?,?)}");
 			stmt.registerOutParameter(1,Types.INTEGER);
 			stmt.setString(2, username);
-			stmt.setBytes(3, salt);
-			stmt.setString(4, hash);
+			stmt.setString(3, hash);
 			stmt.execute();
 			if(stmt.getInt(1) == 0) {
 				return true;
