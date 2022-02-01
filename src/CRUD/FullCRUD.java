@@ -1,6 +1,7 @@
 package CRUD;
 
 import java.sql.Date;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import databasesquared.services.DatabaseConnectionService;
@@ -19,6 +20,7 @@ public class FullCRUD {
 	private ReviewCRUD review;
 	private ReviewerCRUD reviewer;
 	private ReviewListCRUD reviewList;
+	private FilterCRUD filters;
 	public FullCRUD(DatabaseConnectionService dbService) {
 		this.dbService = dbService;
 		// TODO Auto-generated constructor stub
@@ -28,6 +30,7 @@ public class FullCRUD {
 		this.review = new ReviewCRUD(dbService);
 		this.reviewer = new ReviewerCRUD(dbService);
 		this.reviewList = new ReviewListCRUD(dbService);
+		this.filters = new FilterCRUD(dbService);
 	}
 	public int addCompany(String name, int numEmployees, Date dateFounded) {
 		return this.company.addCompany(name, numEmployees, dateFounded);
@@ -35,6 +38,7 @@ public class FullCRUD {
 	public boolean updateCompanyInfo(int id, String name, int numEmployees) {
 		return this.company.updateCompanyInfo(id, name, numEmployees);
 	}
+	public String[] getCompanyInfoHeader = {"Company", "Number of Employees", "Date Founded"};
 	public ArrayList<ArrayList<String>>  getCompanyInfo(int id) {
 		return this.company.parseCompanyInfo(this.company.getCompanyInfo(id));
 	}
@@ -66,6 +70,7 @@ public class FullCRUD {
 	public boolean deleteReview(String username, int RLID, String DBMS) {
 		return this.review.deleteReview(username, RLID, DBMS);
 	}
+	public String[] getReviewsHeader = {"DBMS", "Score", "Text", "Review List name"};
 	public  ArrayList<ArrayList<String>> getReviews(String username){
 		return this.review.parceReviews(this.review.getReviews(username));
 	}
@@ -91,4 +96,18 @@ public class FullCRUD {
 	public  ArrayList<ArrayList<String>> getReviewList(String username){
 		return this.reviewList.parceReviewList(this.reviewList.getReviewList(username));
 	}
+	
+	public String[] getFilteredReviewsHeader = {"Name", "DBMS","Company","Score","Text"};
+	public ArrayList<ArrayList<String>> filterReviews(String reviewer, String DBMS, String company, int score) {
+		return this.filters.parceFilteredReviews(this.filters.filterReviews(reviewer, DBMS, company, score));
+	}
+	public String[] getFilteredDBMSHeader = {"DBMS", "Company","Number of Databases","Average Score"};
+	public ArrayList<ArrayList<String>> filterDBMS(String company, int score) {
+		return this.filters.parceFilteredDBMS(this.filters.filterDBMS(company, score));
+	}
+	public String[] getFilteredCompaniesHeader = {"Company", "Number of Employees", "DBMS Used", "DBMS Created"};
+	public ArrayList<ArrayList<String>> filterCompanies(String usedDBMS,String madeDBMS) {
+		return this.filters.parceFilteredCompanies(this.filters.filterCompanies(usedDBMS, madeDBMS));
+	}
+	
 }
