@@ -1,6 +1,7 @@
 package CRUD;
 
 import java.sql.CallableStatement;
+import javax.swing.JOptionPane;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -39,18 +40,22 @@ public class FilterCRUD {
 
 			cs.execute();
 			int returnValue = cs.getInt(1);
-			ResultSet rs = cs.executeQuery();
 			switch (returnValue) {
 			case 1:
+				JOptionPane.showMessageDialog(null, "Failed to retrieve sodas by restaurant.");
+				
 				System.out.println("Reviewer username does not exist in the database");
 				break;
 			case 2:
+				JOptionPane.showMessageDialog(null, "Failed to retrieve sodas by restaurant.");
 				System.out.println("DBMS does not exist in the database");
 				break;
 			case 3:
+				JOptionPane.showMessageDialog(null, "Failed to retrieve sodas by restaurant.");
 				System.out.println("Company does not exist in the database");
 				break;
 			default:
+				ResultSet rs = cs.executeQuery();
 				return rs;
 			}
 		} catch (SQLException e) {
@@ -66,10 +71,12 @@ public class FilterCRUD {
 	 * @return ReviewerName, DBMS Company, score, text
 	 */
 	public ArrayList<ArrayList<String>> parceFilteredReviews(ResultSet rs) {
+		if(rs == null) {
+		 return null;
+		}
 		ArrayList<ArrayList<String>> list = new ArrayList<>();
 		int index = 0;
 		try {
-			System.out.println(rs.toString());
 			while (rs.next()) {
 				list.add(new ArrayList<>());
 				list.get(index).add(rs.getString(1));
@@ -100,12 +107,12 @@ public class FilterCRUD {
 			cs.setInt(3, score);
 			cs.execute();
 			int returnValue = cs.getInt(1);
-			ResultSet rs = cs.executeQuery();
 			switch (returnValue) {
 			case 1:
 				System.out.println("Company does not exist in the database");
 				break;
 			default:
+				ResultSet rs = cs.executeQuery();
 				return rs;
 			}
 		} catch (SQLException e) {
@@ -121,6 +128,9 @@ public class FilterCRUD {
 	 * @return DBMS, Company, NumFatabases, AvgScore
 	 */
 	public ArrayList<ArrayList<String>> parceFilteredDBMS(ResultSet rs) {
+		if(rs == null) {
+			 return null;
+			}
 		ArrayList<ArrayList<String>> list = new ArrayList<>();
 		int index = 0;
 		try {
@@ -153,7 +163,6 @@ public class FilterCRUD {
 			cs.setString(3, madeDBMS);
 			cs.execute();
 			int returnValue = cs.getInt(1);
-			ResultSet rs = cs.executeQuery();
 			switch (returnValue) {
 			case 1:
 				System.out.println("UsedDBMS does not exist in the database");
@@ -162,6 +171,7 @@ public class FilterCRUD {
 				System.out.println("MadeDBMS does not exist in the database");
 				break;
 			default:
+				ResultSet rs = cs.executeQuery();
 				return rs;
 			}
 		} catch (SQLException e) {
@@ -177,6 +187,9 @@ public class FilterCRUD {
 	 * @return Company, NumEmployees, UsedDBMS, MadeDBMS
 	 */
 	public ArrayList<ArrayList<String>> parceFilteredCompanies(ResultSet rs) {
+		if(rs == null) {
+			 return null;
+			}
 		ArrayList<ArrayList<String>> list = new ArrayList<>();
 		int index = 0;
 		try {

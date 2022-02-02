@@ -97,15 +97,14 @@ public class CompanyCRUD {
 			cs.setInt(2, id);
 			cs.execute();
 			int returnValue = cs.getInt(1);
-			ResultSet r = cs.executeQuery();
 			switch (returnValue) {
 			case 1:
 				System.out.println("getCompanyInfo error 1");
 				break;
 			default:
+				ResultSet r = cs.executeQuery();
 				return r;
 			}
-			return r;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();	
@@ -119,6 +118,9 @@ public class CompanyCRUD {
 	 * @return String:Name, int:NEmployees, Date:DateFounded
 	 */
 	public ArrayList<ArrayList<String>> parseCompanyInfo(ResultSet rs){
+		if(rs == null) {
+			 return null;
+			}
 		ArrayList<ArrayList<String>> list = new ArrayList<>();
 		int index = 0;
 		try {

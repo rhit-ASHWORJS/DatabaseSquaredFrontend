@@ -114,12 +114,12 @@ public class ReviewListCRUD {
 			cs.setString(2, username);
 			cs.execute();
 			int returnValue = cs.getInt(1);
-			ResultSet rs = cs.executeQuery();
 			switch (returnValue) {
 			case 1:
 				System.out.println("getReviewList error 1");
 				break;
 			default:
+				ResultSet rs = cs.executeQuery();
 				return rs;
 			}
 		} catch (SQLException e) {
@@ -135,6 +135,9 @@ public class ReviewListCRUD {
 	 * @return name, date created
 	 */
 	public ArrayList<ArrayList<String>> parceReviewList(ResultSet rs) {
+		if(rs == null) {
+			 return null;
+			}
 		ArrayList<ArrayList<String>> list = new ArrayList<>();
 		int index = 0;
 		try {

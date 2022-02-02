@@ -135,12 +135,12 @@ public class ReviewCRUD {
 			cs.setString(2, username);
 			cs.execute();
 			int returnValue = cs.getInt(1);
-			ResultSet rs = cs.executeQuery();
 			switch (returnValue) {
 			case 1:
 				System.out.println("getReviews error 1");
 				break;
 			default:
+				ResultSet rs = cs.executeQuery();
 				return rs;
 			}
 		} catch (SQLException e) {
@@ -155,6 +155,9 @@ public class ReviewCRUD {
 	 * @return String:DBMSName, double:Score, reviewText, ReviewList name
 	 */
 	public ArrayList<ArrayList<String>> parceReviews(ResultSet rs){
+		if(rs == null) {
+			 return null;
+			}
 		ArrayList<ArrayList<String>> list = new ArrayList<>();
 		int index = 0;
 		try {
@@ -183,12 +186,12 @@ public class ReviewCRUD {
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.execute();
 			int returnValue = cs.getInt(1);
-			ResultSet rs = cs.executeQuery();
 			switch (returnValue) {
 			case 1:
 				System.out.println("getListedReviews error 1");
 				break;
 			default:
+				ResultSet rs = cs.executeQuery();
 				return rs;
 			}
 		} catch (SQLException e) {
@@ -204,6 +207,9 @@ public class ReviewCRUD {
 	 * @return Username, DBMS, Company, Score, reviewText
 	 */
 	public ArrayList<ArrayList<String>> parceListedReviews(ResultSet rs){
+		if(rs == null) {
+			 return null;
+			}
 		ArrayList<ArrayList<String>> list = new ArrayList<>();
 		int index = 0;
 		try {
