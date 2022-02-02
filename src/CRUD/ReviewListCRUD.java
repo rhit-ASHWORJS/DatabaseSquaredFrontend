@@ -51,9 +51,9 @@ public class ReviewListCRUD {
 	 * @param username
 	 * @param RLID ReviewList ID
 	 * @param name
-	 * @return true is successful
+	 * @return 0 if successful, -1 if error
 	 */
-	public boolean updateReviewList(String username, int RLID, String name) {
+	public int updateReviewList(String username, int RLID, String name) {
 		try {
 			CallableStatement cs = dbService.getConnection().prepareCall("{? = call updateReviewList(?,?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
@@ -67,21 +67,21 @@ public class ReviewListCRUD {
 				System.out.println("updateReviewList error 1");
 				break;
 			default:
-				return true;
+				return 0;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();	
 		}
-		return false;
+		return -1;
 	}
 	/**
 	 * deletes a review list from of a users 
 	 * @param username
 	 * @param RLID ReviewList ID
-	 * @return true is successful
+	 * @return 0 if successful, -1 if error
 	 */
-	public boolean deleteReviewList(String username, int RLID) {
+	public int deleteReviewList(String username, int RLID) {
 		try {
 			CallableStatement cs = dbService.getConnection().prepareCall("{? = call deleteReviewList(?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
@@ -94,13 +94,13 @@ public class ReviewListCRUD {
 				System.out.println("deleteReviewList error 1");
 				break;
 			default:
-				return true;
+				return 0;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();	
 		}
-		return false;
+		return -1;
 	}
 	/**
 	 * gets the reviewList from a user 

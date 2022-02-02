@@ -52,9 +52,9 @@ public class CompanyCRUD {
 	 * @param id
 	 * @param name can be null
 	 * @param numEmployees -1 for null 
-	 * @return true if successfull 
+	 * @return 0 if successful, -1 if error
 	 */
-	public boolean updateCompanyInfo(int id, String name, int numEmployees) {
+	public int updateCompanyInfo(int id, String name, int numEmployees) {
 		try {
 			CallableStatement cs = dbService.getConnection().prepareCall("{? = call updateCompanyInfo(?,?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
@@ -76,13 +76,13 @@ public class CompanyCRUD {
 				System.out.println("updateCompany error 1");
 				break;
 			default:
-				return true;
+				return 0;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();	
 		}
-		return false;
+		return -1;
 	}
 	
 	/**

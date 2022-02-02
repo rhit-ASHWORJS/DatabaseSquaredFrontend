@@ -64,9 +64,9 @@ public class DatabaseCRUD {
 	 * @param name nullable
 	 * @param description nullable 
 	 * @param tableCount -1 for null
-	 * @return true if successful
+	 * @return 0 if successful, -1 if error
 	 */
-	public boolean updateDatabase(int id, String name, String description, int tableCount) {
+	public int updateDatabase(int id, String name, String description, int tableCount) {
 		try {
 			CallableStatement cs = dbService.getConnection().prepareCall("{? = call updateDatabase(?,?,?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
@@ -93,22 +93,22 @@ public class DatabaseCRUD {
 				System.out.println("updateDatabase error 1");
 				break;
 			default:
-				return true;
+				return 0;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return false;
+		return -1;
 	}
 
 	/**
 	 * deletes a database from the table
 	 * 
 	 * @param id
-	 * @return true if successful
+	 * @return 0 if successful, -1 if error
 	 */
-	public boolean deleteDatabase(int id) {
+	public int deleteDatabase(int id) {
 		try {
 			CallableStatement cs = dbService.getConnection().prepareCall("{? = call deleteDatabase(?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
@@ -120,13 +120,13 @@ public class DatabaseCRUD {
 				System.out.println("deleteDatabase error 1");
 				break;
 			default:
-				return true;
+				return 0;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return false;
+		return -1;
 	}
 
 	/**

@@ -16,9 +16,9 @@ public class ReviewerCRUD {
 	 * Adds a reviewer to the database
 	 * @param Username
 	 * @param YoE
-	 * @return true if successful
+	 * @return 0 if successful, -1 if error
 	 */
-	public boolean addReviewer(String Username, Date YoE) {
+	public int addReviewer(String Username, Date YoE) {
 		try {
 			CallableStatement cs = dbService.getConnection().prepareCall("{? = call addReviewer(?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
@@ -31,13 +31,13 @@ public class ReviewerCRUD {
 				System.out.println("addReviewer error 1");
 				break;
 			default:
-				return true;
+				return 0;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();	
 		}
-		return false;
+		return -1;
 	}
 	/**
 	 * not implemented

@@ -25,9 +25,9 @@ public class DBMSCRUD {
 	 * @param language
 	 * @param type
 	 * @param dateCreated can be null
-	 * @return true is successful
+	 * @return 0 if successful, -1 if error
 	 */
-	public boolean addDBMS(String name, int MID, String language, String type, Date dateCreated) {
+	public int addDBMS(String name, int MID, String language, String type, Date dateCreated) {
 		try {
 			CallableStatement cs = dbService.getConnection().prepareCall("{? = call addDBMS(?,?,?,?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
@@ -43,13 +43,13 @@ public class DBMSCRUD {
 				System.out.println("addDBMS error 1");
 				break;
 			default:
-				return true;
+				return 0;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return false;
+		return -1;
 	}
 
 	/**
@@ -59,9 +59,9 @@ public class DBMSCRUD {
 	 * @param MID
 	 * @param language nullable
 	 * @param type     nullable
-	 * @return true is successful
+	 * @return 0 if successful, -1 if error
 	 */
-	public boolean updateDBMS(String name, int MID, String language, String type) {
+	public int updateDBMS(String name, int MID, String language, String type) {
 		try {
 			CallableStatement cs = dbService.getConnection().prepareCall("{? = call updateDBMS(?,?,?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
@@ -84,13 +84,13 @@ public class DBMSCRUD {
 				System.out.println("updateDBMS error 1");
 				break;
 			default:
-				return true;
+				return 0;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return false;
+		return -1;
 	}
 
 	/**
@@ -98,9 +98,9 @@ public class DBMSCRUD {
 	 * 
 	 * @param name
 	 * @param MID
-	 * @return true is successful
+	 * @return 0 if successful, -1 if error
 	 */
-	public boolean deleteDBMS(String name, int MID) {
+	public int deleteDBMS(String name, int MID) {
 		try {
 			CallableStatement cs = dbService.getConnection().prepareCall("{? = call deleteDBMS(?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
@@ -113,13 +113,13 @@ public class DBMSCRUD {
 				System.out.println("deleteDBMS error 1");
 				break;
 			default:
-				return true;
+				return 0;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return false;
+		return -1;
 	}
 
 	/**

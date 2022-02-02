@@ -24,7 +24,13 @@ public class LoginRegiser {
 		// TODO Auto-generated constructor stub
 	}
 
-	public boolean login(String username, String password) {
+	/**
+	 * 
+	 * @param username
+	 * @param password
+	 * @return 0: if successful, -1 if error or fail
+	 */
+	public int login(String username, String password) {
 		try {
 			PreparedStatement stmt = this.dbService.getConnection().prepareStatement("Select Salt, PasswordHash \n From [Reviewer] \n where Username = ?");
 			stmt.setString(1, username);
@@ -34,7 +40,7 @@ public class LoginRegiser {
 				String dbHash = rs.getString(2);
 				String hash = hashPassword(salt,password);
 				if(hash.compareTo(dbHash) == 0) {
-					return true;
+					return 0;
 				}
 				
 			}
@@ -42,10 +48,16 @@ public class LoginRegiser {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return false;
+		return -1;
 	}
 
-	public boolean register(String username, String password) {
+	/**
+	 * 
+	 * @param username
+	 * @param password
+	 * @return 0: if successful, -1 if error
+	 */
+	public int register(String username, String password) {
 		//TODO: Task 6
 		byte[] salt = this.getNewSalt();
 		String hash = this.hashPassword(salt, password);
@@ -56,13 +68,13 @@ public class LoginRegiser {
 			stmt.setString(3, hash);
 			stmt.execute();
 			if(stmt.getInt(1) == 0) {
-				return true;
+				return 0;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return false;
+		return -1;
 	}
 	
 	public byte[] getNewSalt() {

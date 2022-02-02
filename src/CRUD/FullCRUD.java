@@ -32,10 +32,17 @@ public class FullCRUD {
 		this.reviewList = new ReviewListCRUD(dbService);
 		this.filters = new FilterCRUD(dbService);
 	}
+	/**
+	 * 
+	 * @param name
+	 * @param numEmployees
+	 * @param dateFounded
+	 * @return the conpany ID -1 if there is an error
+	 */
 	public int addCompany(String name, int numEmployees, Date dateFounded) {
 		return this.company.addCompany(name, numEmployees, dateFounded);
 	}
-	public boolean updateCompanyInfo(int id, String name, int numEmployees) {
+	public int updateCompanyInfo(int id, String name, int numEmployees) {
 		return this.company.updateCompanyInfo(id, name, numEmployees);
 	}
 	public String[] getCompanyInfoHeader = {"Company", "Number of Employees", "Date Founded"};
@@ -43,31 +50,40 @@ public class FullCRUD {
 		return this.company.parseCompanyInfo(this.company.getCompanyInfo(id));
 	}
 	
+	/**
+	 * 
+	 * @param name
+	 * @param DBMSName
+	 * @param tableCount
+	 * @param date
+	 * @param description
+	 * @return database ID return -1 if there is an error
+	 */
 	public int addDatabase(String name, String DBMSName, int tableCount, Date date, String description) {
 		return this.database.addDatabase(name, DBMSName, tableCount, date, description);
 	}
-	public boolean updateDatabase(int id, String name, String description, int tableCount) {
+	public int updateDatabase(int id, String name, String description, int tableCount) {
 		return this.database.updateDatabase(id, name, description, tableCount);
 	}
-	public boolean deleteDatabase(int id) {
+	public int deleteDatabase(int id) {
 		return this.database.deleteDatabase(id);
 	}
-	public boolean addDBMS(String name, int MID, String language, String type, Date dateCreated) {
+	public int addDBMS(String name, int MID, String language, String type, Date dateCreated) {
 		return this.DBMS.addDBMS(name, MID, language, type, dateCreated);
 	}
-	public boolean updateDBMS(String name, int MID, String language, String type) {
+	public int updateDBMS(String name, int MID, String language, String type) {
 		return this.DBMS.updateDBMS(name, MID, language, type);
 	}
-	public boolean deleteDBMS(String name, int MID) {
+	public int deleteDBMS(String name, int MID) {
 		return this.DBMS.deleteDBMS(name, MID);
 	}
-	public boolean addReview(String username, int RLID, String DBMS, double score, String reviewText) {
+	public int addReview(String username, int RLID, String DBMS, double score, String reviewText) {
 		return this.review.addReview(username, RLID, DBMS, score, reviewText);
 	}
-	public boolean updateReview(String username, int RLID, String DBMS, double score,String reviewText) {
+	public int updateReview(String username, int RLID, String DBMS, double score,String reviewText) {
 	return this.review.updateReview(username, RLID, DBMS, score, reviewText);	
 	}
-	public boolean deleteReview(String username, int RLID, String DBMS) {
+	public int deleteReview(String username, int RLID, String DBMS) {
 		return this.review.deleteReview(username, RLID, DBMS);
 	}
 	public String[] getReviewsHeader = {"DBMS", "Score", "Text", "Review List name"};
@@ -79,16 +95,24 @@ public class FullCRUD {
 	public  ArrayList<ArrayList<String>> getListedReviews() {
 		return this.review.parceListedReviews(this.review.getListedReviews());
 	}
-	public boolean addReviewer(String Username, Date YoE) {
+	
+	public int addReviewer(String Username, Date YoE) {
 		return this.reviewer.addReviewer(Username, YoE);
 	}
+	/**
+	 * 
+	 * @param reviewer
+	 * @param listName
+	 * @param dateCreated
+	 * @return ReviewList ID, -1 if it fails 
+	 */
 	public int addReviewList(String reviewer, String listName, Date dateCreated) {
 		return this.reviewList.addReviewList(reviewer, listName, dateCreated);
 	}
-	public boolean updateReviewList(String username, int RLID, String name) {
+	public int updateReviewList(String username, int RLID, String name) {
 		return this.reviewList.updateReviewList(username, RLID, name);
 	}
-	public boolean deleteReviewList(String username, int RLID) {
+	public int deleteReviewList(String username, int RLID) {
 		return this.reviewList.deleteReviewList(username, RLID);
 	}
 	

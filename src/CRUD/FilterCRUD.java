@@ -42,7 +42,13 @@ public class FilterCRUD {
 			ResultSet rs = cs.executeQuery();
 			switch (returnValue) {
 			case 1:
-				System.out.println("filterReviews error 1");
+				System.out.println("Reviewer username does not exist in the database");
+				break;
+			case 2:
+				System.out.println("DBMS does not exist in the database");
+				break;
+			case 3:
+				System.out.println("Company does not exist in the database");
 				break;
 			default:
 				return rs;
@@ -97,7 +103,7 @@ public class FilterCRUD {
 			ResultSet rs = cs.executeQuery();
 			switch (returnValue) {
 			case 1:
-				System.out.println("filterDBMS error 1");
+				System.out.println("Company does not exist in the database");
 				break;
 			default:
 				return rs;
@@ -150,7 +156,10 @@ public class FilterCRUD {
 			ResultSet rs = cs.executeQuery();
 			switch (returnValue) {
 			case 1:
-				System.out.println("filterCompanies error 1");
+				System.out.println("UsedDBMS does not exist in the database");
+				break;
+			case 2:
+				System.out.println("MadeDBMS does not exist in the database");
 				break;
 			default:
 				return rs;

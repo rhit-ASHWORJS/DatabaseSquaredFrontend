@@ -20,9 +20,9 @@ public class ReviewCRUD {
 	 * @param DBMS
 	 * @param score
 	 * @param reviewText can be null
-	 * @return true if successful
+	 * @return 0 if successful, -1 if error
 	 */
-	public boolean addReview(String username, int RLID, String DBMS, double score, String reviewText) {
+	public int addReview(String username, int RLID, String DBMS, double score, String reviewText) {
 		try {
 			CallableStatement cs = dbService.getConnection().prepareCall("{? = call addReview(?,?,?,?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
@@ -42,13 +42,13 @@ public class ReviewCRUD {
 				System.out.println("addReview error 1");
 				break;
 			default:
-				return true;
+				return 0;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();	
 		}
-		return false;
+		return -1;
 	}
 	
 	/**
@@ -58,9 +58,9 @@ public class ReviewCRUD {
 	 * @param DBMS
 	 * @param score -1 is null
 	 * @param reviewText can be null
-	 * @return true if successful 
+	 * @return 0 if successful, -1 if error
 	 */
-	public boolean updateReview(String username, int RLID, String DBMS, double score,String reviewText) {
+	public int updateReview(String username, int RLID, String DBMS, double score,String reviewText) {
 		try {
 			CallableStatement cs = dbService.getConnection().prepareCall("{? = call updateReview(?,?,?,?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
@@ -84,13 +84,13 @@ public class ReviewCRUD {
 				System.out.println("updateReview error 1");
 				break;
 			default:
-				return true;
+				return 0;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();	
 		}
-		return false;
+		return -1;
 	}
 	/**
 	 * deletes a review by a user from the database
@@ -99,7 +99,7 @@ public class ReviewCRUD {
 	 * @param DBMS
 	 * @return true if successful
 	 */
-	public boolean deleteReview(String username, int RLID, String DBMS) {
+	public int deleteReview(String username, int RLID, String DBMS) {
 		try {
 			CallableStatement cs = dbService.getConnection().prepareCall("{? = call deleteReview(?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
@@ -113,13 +113,13 @@ public class ReviewCRUD {
 				System.out.println("deleteReview error 1");
 				break;
 			default:
-				return true;
+				return 0;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();	
 		}
-		return false;
+		return -1;
 	}
 	
 	/**
