@@ -5,6 +5,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import CRUD.FullCRUD;
+import databasesquared.services.LoginRegister;
 
 public class UIMain {
 	public static final int UNAME_MAX_LENGTH = 20;
@@ -12,10 +13,12 @@ public class UIMain {
 	
 	
 	FullCRUD fc;
+	LoginRegister lr;
 	
-	public UIMain(FullCRUD fc)
+	public UIMain(FullCRUD fc, LoginRegister lr)
 	{
 		this.fc = fc;
+		this.lr = lr;
 	}
 	
 	public void beginUI()
@@ -28,7 +31,7 @@ public class UIMain {
 		switch (result) {
 	        case JOptionPane.YES_OPTION:
 	        	System.out.println("Continue as Reviewer");
-	        	UILogin login = new UILogin(fc);
+	        	UILogin login = new UILogin(fc, lr);
 	        	login.setVisibility(true);
 	        break;
 	        case JOptionPane.NO_OPTION:

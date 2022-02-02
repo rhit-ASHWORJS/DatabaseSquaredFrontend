@@ -1,6 +1,7 @@
 package UI;
 
 import javax.swing.*;
+import databasesquared.services.LoginRegister;
 
 import CRUD.FullCRUD;
 
@@ -13,10 +14,12 @@ class UILogin extends JFrame
     JButton loginButton, registerButton;   
     JTextField  UsernameField, PasswordField;  
     FullCRUD fc;
+    LoginRegister lr;
       
-    UILogin(FullCRUD fc)  
+    UILogin(FullCRUD fc, LoginRegister lr)  
     {     
     	this.fc = fc;
+    	this.lr = lr;
     	this.setSize(300,200);
 
         //Create the panel for user input

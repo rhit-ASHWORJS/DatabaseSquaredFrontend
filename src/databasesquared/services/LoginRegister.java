@@ -1,3 +1,4 @@
+package databasesquared.services;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,14 +13,13 @@ import java.security.spec.KeySpec;
 import java.util.Base64;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
-import databasesquared.services.DatabaseConnectionService;
 
-public class LoginRegiser {
+public class LoginRegister {
 	private static final Random RANDOM = new SecureRandom();
 	private static final Base64.Encoder enc = Base64.getEncoder();
 	private static final Base64.Decoder dec = Base64.getDecoder();
 	private DatabaseConnectionService dbService = null;
-	public LoginRegiser(DatabaseConnectionService dbService) {
+	public LoginRegister(DatabaseConnectionService dbService) {
 		this.dbService = dbService;
 		// TODO Auto-generated constructor stub
 	}
@@ -66,6 +66,7 @@ public class LoginRegiser {
 			stmt.registerOutParameter(1,Types.INTEGER);
 			stmt.setString(2, username);
 			stmt.setString(3, hash);
+			stmt.setBytes(4, salt);
 			stmt.execute();
 			if(stmt.getInt(1) == 0) {
 				return 0;
