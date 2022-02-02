@@ -19,6 +19,10 @@ public class UIGuest extends JFrame {
 	FullCRUD fc;
 	JComboBox reportTypes;
 	
+	
+	JLabel[] filters = new JLabel[4];
+	JTextField[] filterText = new JTextField[4];
+	
 	String[] dataViewOptions = {"Reviews", "DBMS", "Companies"};
 
 	public static final int MAXIMUM_FILTER_INPUT = 20;
@@ -51,14 +55,20 @@ public class UIGuest extends JFrame {
 		reportTypes = new JComboBox(dataViewOptions);
 		filterPanel.add(reportTypes);
 		
-		filterPanel.add(new JLabel("DBMS"));
-		filterPanel.add(new JTextField(MAXIMUM_FILTER_INPUT));
-		filterPanel.add(new JLabel("Company"));
-		filterPanel.add(new JTextField(MAXIMUM_FILTER_INPUT));
-		filterPanel.add(new JLabel("Reviewer"));
-		filterPanel.add(new JTextField(MAXIMUM_FILTER_INPUT));
-		filterPanel.add(new JLabel("Minimum Score"));
-		filterPanel.add(new JTextField(MAXIMUM_FILTER_INPUT));
+		filters[0] = new JLabel("DBMS");
+		filterText[0] = new JTextField(MAXIMUM_FILTER_INPUT);
+		filters[1] = new JLabel("Company");
+		filterText[1] = new JTextField(MAXIMUM_FILTER_INPUT);
+		filters[2] = new JLabel("Reviewer");
+		filterText[2] = new JTextField(MAXIMUM_FILTER_INPUT);
+		filters[3] = new JLabel("Minimum Score");
+		filterText[3] = new JTextField(MAXIMUM_FILTER_INPUT);
+		
+		for(int i = 0; i < 4; i++)
+		{
+			filterPanel.add(filters[i]);
+			filterPanel.add(filterText[i]);
+		}
 
 		// Make the data display panel
 		this.setDataReviews();
@@ -85,13 +95,107 @@ public class UIGuest extends JFrame {
 		this.setVisible(visible);
 	}
 	
-	
+	private String[] dataReviewFilters = {"Reviewer", "DBMS", "Company", "Minimum Score"};
 	private void setDataReviews() {
+		setTextBoxTypes(dataReviewFilters);
 		String[] cols = fc.getListedReviewsHeader;
-		ArrayList<ArrayList<String>> reviewsData = fc.getListedReviews();
+		
+		String reviewerFilter = filterText[0].getText();
+		String DBMSFilter = filterText[1].getText();
+		String CompanyFilter = filterText[2].getText();
+		String ScoreFilter = filterText[3].getText();
+		int scoreFilter = -1;
+		
+		if(reviewerFilter.isBlank())
+		{
+			reviewerFilter = null;
+		}
+		if(DBMSFilter.isBlank())
+		{
+			DBMSFilter = null;
+		}
+		if(CompanyFilter.isBlank())
+		{
+			CompanyFilter = null;
+		}
+		if(!ScoreFilter.isBlank())
+		{
+			scoreFilter = Integer.parseInt(ScoreFilter);
+		}
+		
+		ArrayList<ArrayList<String>> reviewsData = fc.filterReviews(reviewerFilter, DBMSFilter, CompanyFilter, scoreFilter);
 		//One-line Arraylist to string conversion found here: https://stackoverflow.com/questions/10043209/convert-arraylist-into-2d-array-containing-varying-lengths-of-arrays
 		String[][] data = reviewsData.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
 		this.setTableData(data, cols);
+	}
+	
+	private String[] DBMSFilters = {"Company", "Minimum Score"};
+	private void setDataDBMS() {
+		setTextBoxTypes(DBMSFilters);
+		String[] cols = fc.getFilteredDBMSHeader;
+		
+		String CompanyFilter = filterText[0].getText();
+		String ScoreFilter = filterText[1].getText();
+		int scoreFilter = -1;
+		
+		if(CompanyFilter.isBlank())
+		{
+			CompanyFilter = null;
+		}
+		if(!ScoreFilter.isBlank())
+		{
+			scoreFilter = Integer.parseInt(ScoreFilter);
+		}
+		
+		
+		ArrayList<ArrayList<String>> DBMSData = fc.filterDBMS(CompanyFilter, scoreFilter);
+		String[][] data = DBMSData.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
+		this.setTableData(data, cols);
+	}
+	
+	private String[] CompaniesFilter = {"DBMS Used", "DBMS Created"};
+	private void setDataCompanies() {
+		setTextBoxTypes(CompaniesFilter);
+		String[] cols = fc.getFilteredCompaniesHeader;
+		
+		String UsedFilter = filterText[0].getText();
+		String CreatedFilter = filterText[1].getText();
+		
+		if(UsedFilter.isBlank())
+		{
+			UsedFilter = null;
+		}
+		if(CreatedFilter.isBlank())
+		{
+			CreatedFilter = null;
+		}
+		
+		
+		ArrayList<ArrayList<String>> CompanyData = fc.filterCompanies(UsedFilter, CreatedFilter);
+		String[][] data = CompanyData.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
+		this.setTableData(data, cols);
+	}
+	
+	private void setTextBoxTypes(String[] filterStrings)
+	{
+		for(int i = 0; i < 4; i++)
+		{
+			if(i < filterStrings.length)
+			{
+				if(!filters[i].getText().equals(filterStrings[i]))
+				{
+					filterText[i].setText("");
+				}
+				filters[i].setText(filterStrings[i]);
+				filterText[i].setEnabled(true);
+			}
+			else
+			{
+				filters[i].setText("N/A");
+				filterText[i].setText("");
+				filterText[i].setEnabled(false);
+			}
+		}
 	}
 	
 	private void setTableData(String[][] data, String[] cols)
@@ -120,12 +224,19 @@ public class UIGuest extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			String selected = reportTypes.getSelectedItem().toString();
-			System.out.println("REFRESH " + selected);
+//			System.out.println("REFRESH " + selected);
 
 			if(selected.equals("Reviews"))
 			{
 				setDataReviews();
-				
+			}
+			else if(selected.equals("DBMS"))
+			{
+				setDataDBMS();
+			}
+			else if(selected.equals("Companies"))
+			{
+				setDataCompanies();
 			}
 		}
 	}
