@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import databasesquared.services.DatabaseConnectionService;
 
 public class ReviewListCRUD {
@@ -20,6 +22,7 @@ public class ReviewListCRUD {
 	 * @param listName
 	 * @param dateCreated can be null
 	 * @return ID of the new reviewList, -1 if it fails 
+	 * -2:Reviewer name is null, -3:List name is null, -4:already exists 
 	 */
 	public int addReviewList(String reviewer, String listName, Date dateCreated) {
 		try {
@@ -35,8 +38,14 @@ public class ReviewListCRUD {
 			int returnValue = cs.getInt(1);
 			switch (returnValue) {
 			case 1:
-				System.out.println("addReviewList error 1");
-				break;
+				JOptionPane.showMessageDialog(null, "Reviewer username cannot be empty");
+				return -2;
+			case 2:
+				JOptionPane.showMessageDialog(null, "ReviewList name cannot be empty");
+				return -3;
+			case 3:
+				JOptionPane.showMessageDialog(null, "Review List already exists");
+				return -4;
 			default:
 				return cs.getInt(5);
 			}
@@ -52,6 +61,7 @@ public class ReviewListCRUD {
 	 * @param RLID ReviewList ID
 	 * @param name
 	 * @return 0 if successful, -1 if error
+	 * 1:Reviewer name is null, 2:List ID is null, 3:list name is null, 4:List does not exist
 	 */
 	public int updateReviewList(String username, int RLID, String name) {
 		try {
@@ -64,8 +74,17 @@ public class ReviewListCRUD {
 			int returnValue = cs.getInt(1);
 			switch (returnValue) {
 			case 1:
-				System.out.println("updateReviewList error 1");
-				break;
+				JOptionPane.showMessageDialog(null, "Reviewer username cannot be empty");
+				return 1;
+			case 2:
+				JOptionPane.showMessageDialog(null, "ReviewList ID cannot be empty");
+				return 2;
+			case 3:
+				JOptionPane.showMessageDialog(null, "Review List name cannot be empty");
+				return 3;
+			case 4:
+				JOptionPane.showMessageDialog(null, "ReviewList does not exist in the database");
+				return 4;
 			default:
 				return 0;
 			}
@@ -80,6 +99,7 @@ public class ReviewListCRUD {
 	 * @param username
 	 * @param RLID ReviewList ID
 	 * @return 0 if successful, -1 if error
+	 * 1:Reviewer name is null, 2:List ID is null, 3:List does not exist
 	 */
 	public int deleteReviewList(String username, int RLID) {
 		try {
@@ -91,8 +111,14 @@ public class ReviewListCRUD {
 			int returnValue = cs.getInt(1);
 			switch (returnValue) {
 			case 1:
-				System.out.println("deleteReviewList error 1");
-				break;
+				JOptionPane.showMessageDialog(null, "Reviewer username cannot be empty");
+				return 1;
+			case 2:
+				JOptionPane.showMessageDialog(null, "ReviewList ID cannot be empty");
+				return 2;
+			case 3:
+				JOptionPane.showMessageDialog(null, "ReviewList does not exist in the database");
+				return 3;
 			default:
 				return 0;
 			}
@@ -106,6 +132,7 @@ public class ReviewListCRUD {
 	 * gets the reviewList from a user 
 	 * @param username
 	 * @return resultset name, date created
+	 * null if there is an error
 	 */
 	public ResultSet getReviewList(String username){
 		try {
@@ -116,7 +143,10 @@ public class ReviewListCRUD {
 			int returnValue = cs.getInt(1);
 			switch (returnValue) {
 			case 1:
-				System.out.println("getReviewList error 1");
+				JOptionPane.showMessageDialog(null, "Reviewer username cannot be empty");
+				break;
+			case 2:
+				JOptionPane.showMessageDialog(null, "Reviewer does not exist in the database");
 				break;
 			default:
 				ResultSet rs = cs.executeQuery();

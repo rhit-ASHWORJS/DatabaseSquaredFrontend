@@ -13,6 +13,7 @@ import java.security.spec.KeySpec;
 import java.util.Base64;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import javax.swing.JOptionPane;
 
 public class LoginRegister {
 	private static final Random RANDOM = new SecureRandom();
@@ -48,6 +49,7 @@ public class LoginRegister {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		JOptionPane.showMessageDialog(null, "Invalide Username or Password");
 		return -1;
 	}
 
@@ -69,6 +71,7 @@ public class LoginRegister {
 			stmt.setBytes(4, salt);
 			stmt.execute();
 			if(stmt.getInt(1) == 0) {
+				JOptionPane.showMessageDialog(null, "MadeDBMS does not exist in the database.");
 				return 0;
 			}
 		} catch (SQLException e) {

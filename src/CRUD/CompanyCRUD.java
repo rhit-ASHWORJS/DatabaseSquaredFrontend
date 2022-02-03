@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import databasesquared.services.DatabaseConnectionService;
 
 public class CompanyCRUD {
@@ -21,7 +23,7 @@ public class CompanyCRUD {
 	 * @param name
 	 * @param numEmployees
 	 * @param dateFounded
-	 * @return ID of new company if sussesfull, -1 if did not work
+	 * @return ID of new company if sussesfull, -1 if did not work, -2 : company was null, -3:numEmplyees was null, -4 company already existed
 	 */
 	public int addCompany(String name, int numEmployees, Date dateFounded) {
 		try {
@@ -35,8 +37,14 @@ public class CompanyCRUD {
 			int returnValue = cs.getInt(1);
 			switch (returnValue) {
 			case 1:
-				System.out.println("add Company error 1");
-				break;
+				JOptionPane.showMessageDialog(null, "Company name cannot be empty.");
+				return -2;
+			case 2:
+				JOptionPane.showMessageDialog(null, "Number of employees cannot be empty.");
+				return -3;
+			case 3:
+				JOptionPane.showMessageDialog(null, "Company already exists.");
+				return -4;
 			default:
 				return cs.getInt(5);
 			}
@@ -52,7 +60,7 @@ public class CompanyCRUD {
 	 * @param id
 	 * @param name can be null
 	 * @param numEmployees -1 for null 
-	 * @return 0 if successful, -1 if error
+	 * @return 0 if successful, -1 if error, 1:ID was null, 2:Company does not exist
 	 */
 	public int updateCompanyInfo(int id, String name, int numEmployees) {
 		try {
@@ -73,8 +81,11 @@ public class CompanyCRUD {
 			int returnValue = cs.getInt(1);
 			switch (returnValue) {
 			case 1:
-				System.out.println("updateCompany error 1");
-				break;
+				JOptionPane.showMessageDialog(null, "Company ID cannot be Empty.");
+				return 1;
+			case 2:
+				JOptionPane.showMessageDialog(null, "Company does not exist in the database.");
+				return 2;
 			default:
 				return 0;
 			}
@@ -88,7 +99,8 @@ public class CompanyCRUD {
 	/**
 	 * get the info about a company
 	 * @param id
-	 * @return resultSet {String:Name, int:NEmployees, Date:DateFounded
+	 * @return resultSet String:Name, int:NEmployees, Date:DateFounded
+	 * 	null if there is an error
 	 */
 	public ResultSet getCompanyInfo(int id) {
 		try {
@@ -99,7 +111,10 @@ public class CompanyCRUD {
 			int returnValue = cs.getInt(1);
 			switch (returnValue) {
 			case 1:
-				System.out.println("getCompanyInfo error 1");
+				JOptionPane.showMessageDialog(null, "Company ID cannot be empty.");
+				break;
+			case 2:
+				JOptionPane.showMessageDialog(null, "Company does not exist in the database.");
 				break;
 			default:
 				ResultSet r = cs.executeQuery();

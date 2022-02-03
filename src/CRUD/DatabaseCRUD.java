@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import databasesquared.services.DatabaseConnectionService;
 
 public class DatabaseCRUD {
@@ -26,6 +28,7 @@ public class DatabaseCRUD {
 	 * @param date
 	 * @param description nullable
 	 * @return ID of added database, -1 if did not work
+	 * -2:Name is null, -3:DBMS is null, -4:table number is null, -5:Database already exists 
 	 */
 	public int addDatabase(String name, String DBMSName, int tableCount, Date date, String description) {
 		try {
@@ -45,8 +48,17 @@ public class DatabaseCRUD {
 			int returnValue = cs.getInt(1);
 			switch (returnValue) {
 			case 1:
-				System.out.println("addDatabase error 1");
-				break;
+				JOptionPane.showMessageDialog(null, "Database name cannot be empty.");
+				return -2;
+			case 2:
+				JOptionPane.showMessageDialog(null, "DBMS name cannot be empty.");
+				return -3;
+			case 3:
+				JOptionPane.showMessageDialog(null, "Table number cannot be empty.");
+				return -4;
+			case 4:
+				JOptionPane.showMessageDialog(null, "Database already exists.");
+				return -5;
 			default:
 				return cs.getInt(7);
 			}
@@ -65,6 +77,7 @@ public class DatabaseCRUD {
 	 * @param description nullable 
 	 * @param tableCount -1 for null
 	 * @return 0 if successful, -1 if error
+	 * 1: ID is null, 2:Does not exist
 	 */
 	public int updateDatabase(int id, String name, String description, int tableCount) {
 		try {
@@ -90,8 +103,11 @@ public class DatabaseCRUD {
 			int returnValue = cs.getInt(1);
 			switch (returnValue) {
 			case 1:
-				System.out.println("updateDatabase error 1");
-				break;
+				JOptionPane.showMessageDialog(null, "Database ID cannot be empty");
+				return 1;
+			case 2:
+				JOptionPane.showMessageDialog(null, "Database does not exist in the database.");
+				return 2;
 			default:
 				return 0;
 			}
@@ -107,6 +123,7 @@ public class DatabaseCRUD {
 	 * 
 	 * @param id
 	 * @return 0 if successful, -1 if error
+	 * 1: ID is null, 2:Does not exist
 	 */
 	public int deleteDatabase(int id) {
 		try {
@@ -117,8 +134,11 @@ public class DatabaseCRUD {
 			int returnValue = cs.getInt(1);
 			switch (returnValue) {
 			case 1:
-				System.out.println("deleteDatabase error 1");
-				break;
+				JOptionPane.showMessageDialog(null, "Database ID cannot be empty");
+				return 1;
+			case 2:
+				JOptionPane.showMessageDialog(null, "Database does not exist in the database.");
+				return 2;
 			default:
 				return 0;
 			}

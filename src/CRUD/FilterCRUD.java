@@ -42,17 +42,13 @@ public class FilterCRUD {
 			int returnValue = cs.getInt(1);
 			switch (returnValue) {
 			case 1:
-				JOptionPane.showMessageDialog(null, "Failed to retrieve sodas by restaurant.");
-				
-				System.out.println("Reviewer username does not exist in the database");
+				JOptionPane.showMessageDialog(null, "Reviewer username does not exist in the database.");
 				break;
 			case 2:
-				JOptionPane.showMessageDialog(null, "Failed to retrieve sodas by restaurant.");
-				System.out.println("DBMS does not exist in the database");
+				JOptionPane.showMessageDialog(null, "DBMS does not exist in the database.");
 				break;
 			case 3:
-				JOptionPane.showMessageDialog(null, "Failed to retrieve sodas by restaurant.");
-				System.out.println("Company does not exist in the database");
+				JOptionPane.showMessageDialog(null, "Company does not exist in the database.");
 				break;
 			default:
 				ResultSet rs = cs.executeQuery();
@@ -109,7 +105,7 @@ public class FilterCRUD {
 			int returnValue = cs.getInt(1);
 			switch (returnValue) {
 			case 1:
-				System.out.println("Company does not exist in the database");
+				JOptionPane.showMessageDialog(null, "Company does not exist in the database.");
 				break;
 			default:
 				ResultSet rs = cs.executeQuery();
@@ -165,10 +161,10 @@ public class FilterCRUD {
 			int returnValue = cs.getInt(1);
 			switch (returnValue) {
 			case 1:
-				System.out.println("UsedDBMS does not exist in the database");
+				JOptionPane.showMessageDialog(null, "UsedDBMS does not exist in the database.");
 				break;
 			case 2:
-				System.out.println("MadeDBMS does not exist in the database");
+				JOptionPane.showMessageDialog(null, "MadeDBMS does not exist in the database.");
 				break;
 			default:
 				ResultSet rs = cs.executeQuery();

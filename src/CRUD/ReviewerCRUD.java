@@ -4,6 +4,8 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Types;
 
+import javax.swing.JOptionPane;
+
 import databasesquared.services.DatabaseConnectionService;
 
 public class ReviewerCRUD {
@@ -17,6 +19,7 @@ public class ReviewerCRUD {
 	 * @param Username
 	 * @param YoE
 	 * @return 0 if successful, -1 if error
+	 * 1:name is null, 2:Experience is null, 3:already exists 
 	 */
 	public int addReviewer(String Username, Date YoE) {
 		try {
@@ -28,8 +31,14 @@ public class ReviewerCRUD {
 			int returnValue = cs.getInt(1);
 			switch (returnValue) {
 			case 1:
-				System.out.println("addReviewer error 1");
-				break;
+				JOptionPane.showMessageDialog(null, "Reviewer username cannot be empty");
+				return 1;
+			case 2:
+				JOptionPane.showMessageDialog(null, "Experience cannot be empty");
+				return 2;
+			case 3:
+				JOptionPane.showMessageDialog(null, "Reviewer already exists");
+				return 3;
 			default:
 				return 0;
 			}

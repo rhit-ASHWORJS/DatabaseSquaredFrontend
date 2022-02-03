@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import databasesquared.services.DatabaseConnectionService;
 
 public class DBMSCRUD {
@@ -26,6 +28,7 @@ public class DBMSCRUD {
 	 * @param type
 	 * @param dateCreated can be null
 	 * @return 0 if successful, -1 if error
+	 * 1:Name is null, 2:Manf ID is null, 3: Language is null, 4:Type is null, 5: Already exists 
 	 */
 	public int addDBMS(String name, int MID, String language, String type, Date dateCreated) {
 		try {
@@ -40,8 +43,20 @@ public class DBMSCRUD {
 			int returnValue = cs.getInt(1);
 			switch (returnValue) {
 			case 1:
-				System.out.println("addDBMS error 1");
-				break;
+				JOptionPane.showMessageDialog(null, "DBMS name cannot be empty");
+				return 1;
+			case 2:
+				JOptionPane.showMessageDialog(null, "Manufacturer ID cannot be empty");
+				return 2;
+			case 3:
+				JOptionPane.showMessageDialog(null, "Language cannot be empty");
+				return 3;
+			case 4:
+				JOptionPane.showMessageDialog(null, "type cannont be empty");
+				return 4;
+			case 5:
+				JOptionPane.showMessageDialog(null, "DBMS already exists");
+				return 5;
 			default:
 				return 0;
 			}
@@ -60,6 +75,7 @@ public class DBMSCRUD {
 	 * @param language nullable
 	 * @param type     nullable
 	 * @return 0 if successful, -1 if error
+	 * 1:Name is null, 2:Manf ID is null, 3:DBMS does not exist, 4:do not have permission to do this
 	 */
 	public int updateDBMS(String name, int MID, String language, String type) {
 		try {
@@ -81,8 +97,17 @@ public class DBMSCRUD {
 			int returnValue = cs.getInt(1);
 			switch (returnValue) {
 			case 1:
-				System.out.println("updateDBMS error 1");
-				break;
+				JOptionPane.showMessageDialog(null, "DBMS name cannot be empty");
+				return 1;
+			case 2:
+				JOptionPane.showMessageDialog(null, "Manufacturer ID cannot be empty");
+				return 2;
+			case 3:
+				JOptionPane.showMessageDialog(null, "DBMS does not exist in the database");
+				return 3;
+			case 4:
+				JOptionPane.showMessageDialog(null, "Company doesn not have permission to edit this DBMS");
+				return 4;
 			default:
 				return 0;
 			}
@@ -99,6 +124,7 @@ public class DBMSCRUD {
 	 * @param name
 	 * @param MID
 	 * @return 0 if successful, -1 if error
+	 * 1:Name is null, 2:Manf ID is null, 3:DBMS does not exist, 4:do not have permission to do this
 	 */
 	public int deleteDBMS(String name, int MID) {
 		try {
@@ -110,8 +136,17 @@ public class DBMSCRUD {
 			int returnValue = cs.getInt(1);
 			switch (returnValue) {
 			case 1:
-				System.out.println("deleteDBMS error 1");
-				break;
+				JOptionPane.showMessageDialog(null, "DBMS name cannot be empty");
+				return 1;
+			case 2:
+				JOptionPane.showMessageDialog(null, "Manufacturer ID cannot be empty");
+				return 2;
+			case 3:
+				JOptionPane.showMessageDialog(null, "DBMS does not exist in the database");
+				return 3;
+			case 4:
+				JOptionPane.showMessageDialog(null, "Company doesn not have permission to delete this DBMS");
+				return 4;
 			default:
 				return 0;
 			}
