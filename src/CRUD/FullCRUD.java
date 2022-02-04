@@ -162,7 +162,7 @@ public class FullCRUD {
 	 *         null, 3:DBMS name is null, 4: already exists, 5:Do not have
 	 *         permission
 	 */
-	public int addReview(String username, int RLID, String DBMS, double score, String reviewText) {
+	public int addReview(String username, String RLID, String DBMS, double score, String reviewText) {
 		return this.review.addReview(username, RLID, DBMS, score, reviewText);
 	}
 
@@ -178,7 +178,7 @@ public class FullCRUD {
 	 *         null, 3:DBMS name is null, 4: already exists, 5:Do not have
 	 *         permission
 	 */
-	public int updateReview(String username, int RLID, String DBMS, double score, String reviewText) {
+	public int updateReview(String username, String RLID, String DBMS, double score, String reviewText) {
 		return this.review.updateReview(username, RLID, DBMS, score, reviewText);
 	}
 
@@ -192,7 +192,7 @@ public class FullCRUD {
 	 *         null, 3:DBMS name is null, 4: does not exists, 5:Do not have
 	 *         permission
 	 */
-	public int deleteReview(String username, int RLID, String DBMS) {
+	public int deleteReview(String username, String RLID, String DBMS) {
 		return this.review.deleteReview(username, RLID, DBMS);
 	}
 
@@ -264,8 +264,8 @@ public class FullCRUD {
 	 * @return 0 if successful, -1 if error 1:Reviewer name is null, 2:List ID is
 	 *         null, 3:List does not exist
 	 */
-	public int deleteReviewList(String username, int RLID) {
-		return this.reviewList.deleteReviewList(username, RLID);
+	public int deleteReviewList(String username, String RLName) {
+		return this.reviewList.deleteReviewList(username, RLName);
 	}
 
 	public String[] getReviewListHeader = { "Name", "Date Created" };
@@ -288,10 +288,11 @@ public class FullCRUD {
 	 * @param DBMS
 	 * @param company
 	 * @param score    -1 for null
+	 * @param RLname 
 	 * @return String list of the table, null if there is an error
 	 */
-	public ArrayList<ArrayList<String>> filterReviews(String reviewer, String DBMS, String company, int score) {
-		return this.filters.parceFilteredReviews(this.filters.filterReviews(reviewer, DBMS, company, score));
+	public ArrayList<ArrayList<String>> filterReviews(String reviewer, String DBMS, String company, int score, String RLname) {
+		return this.filters.parceFilteredReviews(this.filters.filterReviews(reviewer, DBMS, company, score, RLname));
 	}
 
 	public String[] getFilteredDBMSHeader = { "DBMS", "Company", "Number of Databases", "Average Score" };

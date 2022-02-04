@@ -101,12 +101,12 @@ public class ReviewListCRUD {
 	 * @return 0 if successful, -1 if error
 	 * 1:Reviewer name is null, 2:List ID is null, 3:List does not exist
 	 */
-	public int deleteReviewList(String username, int RLID) {
+	public int deleteReviewList(String username, String RLName) {
 		try {
 			CallableStatement cs = dbService.getConnection().prepareCall("{? = call deleteReviewList(?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setString(2, username);
-			cs.setInt(3, RLID);
+			cs.setString(3, RLName);
 			cs.execute();
 			int returnValue = cs.getInt(1);
 			switch (returnValue) {

@@ -30,12 +30,12 @@ public class ReviewCRUD {
 	 *         null, 3:DBMS name is null, 4: already exists, 5:Do not have
 	 *         permission
 	 */
-	public int addReview(String username, int RLID, String DBMS, double score, String reviewText) {
+	public int addReview(String username, String RLID, String DBMS, double score, String reviewText) {
 		try {
 			CallableStatement cs = dbService.getConnection().prepareCall("{? = call addReview(?,?,?,?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setString(2, username);
-			cs.setInt(3, RLID);
+			cs.setString(3, RLID);
 			cs.setString(4, DBMS);
 			cs.setDouble(5, score);
 			if (reviewText == null) {
@@ -83,12 +83,12 @@ public class ReviewCRUD {
 	 *         null, 3:DBMS name is null, 4: already exists, 5:Do not have
 	 *         permission
 	 */
-	public int updateReview(String username, int RLID, String DBMS, double score, String reviewText) {
+	public int updateReview(String username, String RLID, String DBMS, double score, String reviewText) {
 		try {
 			CallableStatement cs = dbService.getConnection().prepareCall("{? = call updateReview(?,?,?,?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setString(2, username);
-			cs.setInt(3, RLID);
+			cs.setString(3, RLID);
 			cs.setString(4, DBMS);
 			if (score == -1.0) {
 				cs.setNull(5, Types.NULL);
@@ -135,12 +135,12 @@ public class ReviewCRUD {
 	 *         null, 3:DBMS name is null, 4: does not exists, 5:Do not have
 	 *         permission
 	 */
-	public int deleteReview(String username, int RLID, String DBMS) {
+	public int deleteReview(String username, String RLID, String DBMS) {
 		try {
 			CallableStatement cs = dbService.getConnection().prepareCall("{? = call deleteReview(?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setString(2, username);
-			cs.setInt(3, RLID);
+			cs.setString(3, RLID);
 			cs.setString(4, DBMS);
 			cs.execute();
 			int returnValue = cs.getInt(1);

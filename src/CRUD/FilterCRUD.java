@@ -26,7 +26,7 @@ public class FilterCRUD {
 	 * @param score    nullable -1 is null
 	 * @return rs
 	 */
-	public ResultSet filterReviews(String reviewer, String DBMS, String company, int score) {
+	public ResultSet filterReviews(String reviewer, String DBMS, String company, int score, String RLname) {
 		try {
 			CallableStatement cs = dbService.getConnection().prepareCall("{? = call filterReviews(?,?,?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
@@ -37,6 +37,7 @@ public class FilterCRUD {
 			cs.setString(4, company);
 
 			cs.setInt(5, score);
+			cs.setString(6,RLname);
 
 			cs.execute();
 			int returnValue = cs.getInt(1);
