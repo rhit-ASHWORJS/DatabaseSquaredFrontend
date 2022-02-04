@@ -19,14 +19,23 @@ public class UIReviewList extends JFrame {
 	JScrollPane dataPane;
 	JTable dataTable;
 	FullCRUD fc;
-	JComboBox reportTypes;
+	JComboBox reviewListSelections;
 	String username;
-	JTextField reviewListNameField;
 	
 	String[] dataViewOptions = {"Reviews", "DBMS", "Companies"};
 
 	public static final int MAXIMUM_FILTER_INPUT = 20;
 	UIReviewList(FullCRUD fc, String username) {
+		try
+        {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        }    
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }   
+		
 		this.username = username;
 		this.fc = fc;
 		this.setSize(800, 550);
@@ -51,11 +60,10 @@ public class UIReviewList extends JFrame {
 		filtersLabel.setFont(new Font("Serif", Font.PLAIN, 20));
 		filterPanel.add(filtersLabel);
 		
+		filterPanel.add(new JLabel("Review List Selector"));
+		reviewListSelections = new JComboBox(getMyReviewLists());
+		filterPanel.add(reviewListSelections);
 		
-		
-		filterPanel.add(new JLabel("Review List Name"));
-		reviewListNameField = new JTextField(MAXIMUM_FILTER_INPUT);
-		filterPanel.add(reviewListNameField);
 //		filterPanel.add(new JLabel("Company"));
 //		filterPanel.add(new JTextField(MAXIMUM_FILTER_INPUT));
 //		filterPanel.add(new JLabel("Reviewer"));
@@ -80,6 +88,9 @@ public class UIReviewList extends JFrame {
 		JButton editReviewButton = new JButton("EDIT REVIEW LIST");
 		editReviewButton.addActionListener(new EditReviewListener());
 		interactionPanel.add(editReviewButton);
+		JButton deleteListButton = new JButton("DELETE REVIEW LIST");
+		deleteListButton.addActionListener(new DeleteReviewListener());
+		interactionPanel.add(deleteListButton);
 		
 		// Put all the panels in the frame
 
@@ -104,6 +115,24 @@ public class UIReviewList extends JFrame {
 		this.setTableData(data, cols);
 	}
 	
+	private String[] getMyReviewLists() {
+		String[] cols = fc.getReviewListHeader;
+		ArrayList<ArrayList<String>> reviewsData = fc.getReviewList(username);
+		if(reviewsData == null)
+		{
+			return null;
+		}
+		
+		String[] myReviewLists = new String[reviewsData.size()];
+		int i = 0;
+		for(ArrayList<String> data : reviewsData)
+		{
+			myReviewLists[i] = data.get(0);
+			i++;
+		}
+		return myReviewLists;
+	}
+	
 	private void refreshUI() {
 		this.pack();
 	}
@@ -119,7 +148,13 @@ public class UIReviewList extends JFrame {
 		dataPane = new JScrollPane(dataTable);
 		dataTable.setFillsViewportHeight(true);
 		add(dataPane, BorderLayout.EAST);
+		updateComboBox();
 		this.pack();
+	}
+	
+	private void updateComboBox() {
+		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(getMyReviewLists());
+		reviewListSelections.setModel(model);
 	}
 
 	class CSVListener implements ActionListener {
@@ -140,8 +175,8 @@ public class UIReviewList extends JFrame {
 	class CreateReviewListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			System.out.println(reviewListNameField.getText());
-			fc.addReviewList(username, reviewListNameField.getText(), new Date(Calendar.getInstance().getTimeInMillis()));
+			String input = JOptionPane.showInputDialog("Enter Name For New Review List");
+			fc.addReviewList(username, input, new Date(Calendar.getInstance().getTimeInMillis()));
 			setDataReviewList();
 		}
 	}
@@ -152,6 +187,16 @@ public class UIReviewList extends JFrame {
 		public void actionPerformed(ActionEvent arg0) {
 			// TODO Auto-generated method stub
 			
+		}
+		
+	}
+	
+	class DeleteReviewListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			String listToDelete = (String) reviewListSelections.getSelectedItem();
+			System.out.println("Delete Review List: " + listToDelete);
 		}
 		
 	}

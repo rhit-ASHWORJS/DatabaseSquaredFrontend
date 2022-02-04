@@ -28,7 +28,7 @@ public class FilterCRUD {
 	 */
 	public ResultSet filterReviews(String reviewer, String DBMS, String company, int score, String RLname) {
 		try {
-			CallableStatement cs = dbService.getConnection().prepareCall("{? = call filterReviews(?,?,?,?)}");
+			CallableStatement cs = dbService.getConnection().prepareCall("{? = call filterReviews(?,?,?,?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setString(2, reviewer);
 

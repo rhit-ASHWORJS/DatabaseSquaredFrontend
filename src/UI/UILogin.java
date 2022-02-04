@@ -8,7 +8,8 @@ import CRUD.FullCRUD;
 import java.awt.*;  
 import java.awt.event.*;  
 import java.lang.Exception;
-import java.sql.Date;  
+import java.sql.Date;
+import java.util.Calendar;  
 
 class UILogin extends JFrame
 {  
@@ -19,7 +20,15 @@ class UILogin extends JFrame
       
     UILogin(FullCRUD fc, LoginRegister lr)  
     {     
-    	
+    	try
+        {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        }    
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }   
     	this.fc = fc;
     	this.lr = lr;
     	this.setSize(300,200);
@@ -80,7 +89,11 @@ class UILogin extends JFrame
     	@Override
     	public void actionPerformed(ActionEvent arg0) {
     		//Register the user
-    		fc.addReviewer(UsernameField.getText(), new Date(22));
+    		String input = JOptionPane.showInputDialog("How Many Years of Experience do you have");
+    		int yoe = Integer.parseInt(input);
+    		int thisYear = new Date(Calendar.getInstance().getTimeInMillis()).getYear();
+    		int yearStarted = thisYear-yoe;
+    		fc.addReviewer(UsernameField.getText(), new Date(thisYear, 1, 1));
     		int success = lr.register(UsernameField.getText(), PasswordField.getText());
     		System.out.println(UsernameField.getText());
     		System.out.println(PasswordField.getText());
@@ -89,7 +102,7 @@ class UILogin extends JFrame
     		{
     			JOptionPane.showMessageDialog(null, "Registration Failed.");
     		}
-    		else
+    		else if(success == 0)
     		{
     			UIReviewer ui = new UIReviewer(fc, UsernameField.getText());
         		ui.setVisibility(true);

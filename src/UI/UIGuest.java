@@ -133,7 +133,7 @@ public class UIGuest extends JFrame {
 			scoreFilter = Integer.parseInt(ScoreFilter);
 		}
 		
-		ArrayList<ArrayList<String>> reviewsData = fc.filterReviews(reviewerFilter, DBMSFilter, CompanyFilter, scoreFilter);
+		ArrayList<ArrayList<String>> reviewsData = fc.filterReviews(reviewerFilter, DBMSFilter, CompanyFilter, scoreFilter, null);
 		//One-line Arraylist to string conversion found here: https://stackoverflow.com/questions/10043209/convert-arraylist-into-2d-array-containing-varying-lengths-of-arrays
 		String[][] data = reviewsData.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
 		this.setTableData(data, cols);

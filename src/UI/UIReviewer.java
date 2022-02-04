@@ -142,7 +142,7 @@ public class UIReviewer extends JFrame {
 			scoreFilter = Integer.parseInt(ScoreFilter);
 		}
 		
-		ArrayList<ArrayList<String>> reviewsData = fc.filterReviews(reviewerFilter, DBMSFilter, CompanyFilter, scoreFilter);
+		ArrayList<ArrayList<String>> reviewsData = fc.filterReviews(reviewerFilter, DBMSFilter, CompanyFilter, scoreFilter, null);
 		if(reviewsData == null)
 		{
 			return;
