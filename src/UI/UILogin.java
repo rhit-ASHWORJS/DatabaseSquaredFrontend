@@ -78,10 +78,14 @@ class UILogin extends JFrame
     class LoginListener implements ActionListener{
     	@Override
     	public void actionPerformed(ActionEvent arg0) {
+    		int login = lr.login(UsernameField.getText(), PasswordField.getText());
     		
-    		UIReviewer ui = new UIReviewer(fc, UsernameField.getText());
-    		ui.setVisibility(true);
-    		setVisibility(false);
+    		if(login == 0)
+    		{
+    			UIReviewer ui = new UIReviewer(fc, UsernameField.getText());
+    			ui.setVisibility(true);
+    			setVisibility(false);
+    		}
     	}
     }
     
@@ -100,7 +104,7 @@ class UILogin extends JFrame
     		
     		if(success == -1)
     		{
-    			JOptionPane.showMessageDialog(null, "Registration Failed.");
+//    			JOptionPane.showMessageDialog(null, "Registration Failed.");
     		}
     		else if(success == 0)
     		{

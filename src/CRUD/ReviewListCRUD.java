@@ -26,12 +26,12 @@ public class ReviewListCRUD {
 	 */
 	public int addReviewList(String reviewer, String listName, Date dateCreated) {
 		try {
-			CallableStatement cs = dbService.getConnection().prepareCall("{? = call addReviewList(?,?,?,?)}");
+			CallableStatement cs = dbService.getConnection().prepareCall("{? = call addReviewList(?,?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setString(2, reviewer);
 			cs.setString(3, listName);			
 			cs.setDate(4, dateCreated);
-			cs.registerOutParameter(5, Types.INTEGER);
+//			cs.registerOutParameter(5, Types.INTEGER);
 			
 			System.out.println(cs.toString());
 			cs.execute();
@@ -47,7 +47,7 @@ public class ReviewListCRUD {
 				JOptionPane.showMessageDialog(null, "Review List already exists");
 				return -4;
 			default:
-				return cs.getInt(5);
+				return cs.getInt(1);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
