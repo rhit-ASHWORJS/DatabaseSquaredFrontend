@@ -70,10 +70,28 @@ public class LoginRegister {
 			stmt.setString(3, hash);
 			stmt.setBytes(4, salt);
 			stmt.execute();
-			if(stmt.getInt(1) == 0) {
-				JOptionPane.showMessageDialog(null, "MadeDBMS does not exist in the database.");
-				return 0;
-			}
+				switch (stmt.getInt(1)) {
+				case 1: 
+					JOptionPane.showMessageDialog(null, "Reviewer username cannot be null");
+					return 1;
+				case 2: 
+					JOptionPane.showMessageDialog(null, "Password hash cannot be null");
+					return 2;
+				case 3: 
+					JOptionPane.showMessageDialog(null, "Password salt cannot be null");
+					return 3;
+				case 4: 
+					JOptionPane.showMessageDialog(null, "Reviewer does not exist in the database");
+					return 4;
+				case 5: 
+					JOptionPane.showMessageDialog(null, "This Username or Password is already taken");
+					return 5;
+				
+				default:
+					return 0;
+				}
+				
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
