@@ -27,6 +27,16 @@ public class UIGuest extends JFrame {
 
 	public static final int MAXIMUM_FILTER_INPUT = 20;
 	UIGuest(FullCRUD fc) {
+		try
+        {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        }    
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }    
+		
 		this.fc = fc;
 		this.setSize(800, 550);
 		this.setTitle("Guest View");

@@ -7,7 +7,8 @@ import CRUD.FullCRUD;
 
 import java.awt.*;  
 import java.awt.event.*;  
-import java.lang.Exception;  
+import java.lang.Exception;
+import java.sql.Date;  
 
 class UILogin extends JFrame
 {  
@@ -18,6 +19,7 @@ class UILogin extends JFrame
       
     UILogin(FullCRUD fc, LoginRegister lr)  
     {     
+    	
     	this.fc = fc;
     	this.lr = lr;
     	this.setSize(300,200);
@@ -67,7 +69,7 @@ class UILogin extends JFrame
     class LoginListener implements ActionListener{
     	@Override
     	public void actionPerformed(ActionEvent arg0) {
-    		System.out.println("click");
+    		
     		UIReviewer ui = new UIReviewer(fc, UsernameField.getText());
     		ui.setVisibility(true);
     		setVisibility(false);
@@ -77,8 +79,22 @@ class UILogin extends JFrame
     class RegisterListener implements ActionListener{
     	@Override
     	public void actionPerformed(ActionEvent arg0) {
-    		System.out.println("clack");
+    		//Register the user
+    		fc.addReviewer(UsernameField.getText(), new Date(22));
+    		int success = lr.register(UsernameField.getText(), PasswordField.getText());
+    		System.out.println(UsernameField.getText());
+    		System.out.println(PasswordField.getText());
     		
+    		if(success == -1)
+    		{
+    			JOptionPane.showMessageDialog(null, "Registration Failed.");
+    		}
+    		else
+    		{
+    			UIReviewer ui = new UIReviewer(fc, UsernameField.getText());
+        		ui.setVisibility(true);
+        		setVisibility(false);
+    		}
     	}
     }
 
