@@ -26,18 +26,20 @@ public class UIMain {
 		//There's two different paths a user can take here: Guest (no login) or Reviewer (login)
 		//We start by asking if they want to login as a reviewer
 		
+		//Get the user's choice
 		int result = JOptionPane.showConfirmDialog(null, "Would you like to login as a Reviewer?");
 		
+		//open the correct panel
 		switch (result) {
 	        case JOptionPane.YES_OPTION:
 	        	System.out.println("Continue as Reviewer");
 	        	UILogin login = new UILogin(fc, lr);
-	        	login.setVisibility(true);
+	        	login.setVisible(true);
 	        break;
 	        case JOptionPane.NO_OPTION:
 	        	System.out.println("Continue as Guest");
 	        	UIGuest guest = new UIGuest(fc);
-	        	guest.setVisibility(true);
+	        	guest.setVisible(true);
 	        break;
 	        case JOptionPane.CANCEL_OPTION:
 	        	System.out.println("Cancelled the option pain");

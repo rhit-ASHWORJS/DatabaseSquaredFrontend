@@ -13,13 +13,17 @@ import java.util.Calendar;
 
 class UILogin extends JFrame
 {  
+	//DB Interaction
+	FullCRUD fc;
+    LoginRegister lr;
+	
+	//UI Fields
     JButton loginButton, registerButton;   
     JTextField  UsernameField, PasswordField;  
-    FullCRUD fc;
-    LoginRegister lr;
       
     UILogin(FullCRUD fc, LoginRegister lr)  
     {     
+    	//Make the UI look okay
     	try
         {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
@@ -29,12 +33,16 @@ class UILogin extends JFrame
             System.out.println(e.getMessage());
             e.printStackTrace();
         }   
+    	
+    	//Save DB interaction & sec screen size
     	this.fc = fc;
     	this.lr = lr;
     	this.setSize(300,200);
 
         //Create the panel for user input
         JPanel inputPanel = new JPanel(new GridLayout(2,2));
+        
+        //Create Username & Password Boxes
         JLabel userLabel = new JLabel();  
         userLabel.setText("Username");
         UsernameField = new JTextField(UIMain.UNAME_MAX_LENGTH);
@@ -42,6 +50,7 @@ class UILogin extends JFrame
         passLabel.setText("Password");
         PasswordField = new JPasswordField(UIMain.PASS_MAX_LENGTH);
         
+        //Add username & password boxes to panel
         inputPanel.add(userLabel);
         inputPanel.add(UsernameField);
         inputPanel.add(passLabel);
@@ -60,57 +69,76 @@ class UILogin extends JFrame
         buttonPanel.add(loginButton);
         buttonPanel.add(registerButton);
         
-        //Add our panels to the frame
+        //Add all our panels to the frame
         add(titlePanel, BorderLayout.NORTH);
         add(inputPanel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
              
+        //Add actionlisteners to our puttons
         loginButton.addActionListener(new LoginListener());
         registerButton.addActionListener(new RegisterListener());
-        setTitle("LOGIN FORM");         //set title to the login form  
+        
+        //set title of the window
+        setTitle("LOGIN FORM");         
     }
-    
-    public void setVisibility(boolean visible)
-    {
-    	this.setVisible(visible);
-    }
+ 
       
+    //Button Actions
+    
+    //Login button Action
     class LoginListener implements ActionListener{
     	@Override
     	public void actionPerformed(ActionEvent arg0) {
+    		//Attempt login
     		int login = lr.login(UsernameField.getText(), PasswordField.getText());
     		
+    		//If login successful, open reviewer panel
     		if(login == 0)
     		{
     			UIReviewer ui = new UIReviewer(fc, UsernameField.getText());
     			ui.setVisibility(true);
-    			setVisibility(false);
+    			
+    			//Get rid of this window
+    			setVisible(false);
     		}
     	}
     }
     
+    //Register button Action
     class RegisterListener implements ActionListener{
     	@Override
     	public void actionPerformed(ActionEvent arg0) {
-    		//Register the user
-    		String input = JOptionPane.showInputDialog("How Many Years of Experience do you have");
-    		int yoe = Integer.parseInt(input);
-    		int thisYear = new Date(Calendar.getInstance().getTimeInMillis()).getYear();
-    		int yearStarted = thisYear-yoe;
-    		fc.addReviewer(UsernameField.getText(), new Date(thisYear, 1, 1));
-    		int success = lr.register(UsernameField.getText(), PasswordField.getText());
-    		System.out.println(UsernameField.getText());
-    		System.out.println(PasswordField.getText());
     		
-    		if(success == -1)
-    		{
-//    			JOptionPane.showMessageDialog(null, "Registration Failed.");
+    		//Get Years of Experience
+    		String input = JOptionPane.showInputDialog("How Many Years of Experience do you have");
+    		int yoe = -1;
+    		
+    		try {
+    			yoe = Integer.parseInt(input);
     		}
-    		else if(success == 0)
+    		catch(Exception E) {
+    			//They entered a invalid # of years
+    		}
+    		
+    		if(yoe > -1)
     		{
-    			UIReviewer ui = new UIReviewer(fc, UsernameField.getText());
-        		ui.setVisibility(true);
-        		setVisibility(false);
+    			//Find the year they started working
+	    		int thisYear = new Date(Calendar.getInstance().getTimeInMillis()).getYear();
+	    		int yearStarted = thisYear-yoe;
+	    		
+	    		//Add the reviewer
+	    		fc.addReviewer(UsernameField.getText(), new Date(thisYear, 1, 1));
+	    		
+	    		//Register the reviewer
+	    		int success = lr.register(UsernameField.getText(), PasswordField.getText());
+	    		
+	    		//If registration was sucessful, login the reviewer
+	    		if(success == 0)
+	    		{
+	    			UIReviewer ui = new UIReviewer(fc, UsernameField.getText());
+	        		ui.setVisibility(true);
+	        		setVisible(false);
+	    		}
     		}
     	}
     }

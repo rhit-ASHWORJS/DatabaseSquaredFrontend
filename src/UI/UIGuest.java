@@ -13,20 +13,23 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 public class UIGuest extends JFrame {
+	//DB interaction
+	FullCRUD fc;
 	
+	//UI Elements
 	JScrollPane dataPane;
 	JTable dataTable;
-	FullCRUD fc;
 	JComboBox reportTypes;
-	
-	
 	JLabel[] filters = new JLabel[4];
 	JTextField[] filterText = new JTextField[4];
 	
+	//Data options for dropdown	
 	String[] dataViewOptions = {"Reviews", "DBMS", "Companies"};
 
+	//Maximum allowed length of text box entry
 	public static final int MAXIMUM_FILTER_INPUT = 20;
 	UIGuest(FullCRUD fc) {
+		//Make the UI look okay
 		try
         {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
@@ -37,34 +40,42 @@ public class UIGuest extends JFrame {
             e.printStackTrace();
         }    
 		
+		//Save DB interaction & set screen size
 		this.fc = fc;
 		this.setSize(800, 550);
 		this.setTitle("Guest View");
 
 		// Make the header panel
 		JPanel headerPanel = new JPanel(new GridLayout(1, 2));
+		
+		//Make current user & current view labels for header
 		JLabel currentUserLabel = new JLabel();
 		currentUserLabel.setText("Current User: Guest");
 		currentUserLabel.setFont(new Font("Serif", Font.PLAIN, 20));
 		JLabel currentViewLabel = new JLabel();
 		currentViewLabel.setText("Current View: Data View");
 		currentViewLabel.setFont(new Font("Serif", Font.PLAIN, 20));
+		
+		//Add labels to header
 		headerPanel.add(currentUserLabel);
 		headerPanel.add(currentViewLabel);
 		headerPanel.setBackground(Color.gray);
 
 		// Make the filter panel
 		JPanel filterPanel = new JPanel(new GridLayout(12, 1));
-		filterPanel.setBorder(new EmptyBorder(0,20,0,20));
+		filterPanel.setBorder(new EmptyBorder(0,20,0,20));//space out filter entries
+		
+		//Make the filter panel label
 		JLabel filtersLabel = new JLabel("Filters:");
 		filtersLabel.setFont(new Font("Serif", Font.PLAIN, 20));
 		filterPanel.add(filtersLabel);
 		
+		//Make the Report Type drop down
 		filterPanel.add(new JLabel("Report Type"));
-		
 		reportTypes = new JComboBox(dataViewOptions);
 		filterPanel.add(reportTypes);
 		
+		//Make each filter box
 		filters[0] = new JLabel("DBMS");
 		filterText[0] = new JTextField(MAXIMUM_FILTER_INPUT);
 		filters[1] = new JLabel("Company");
@@ -74,37 +85,38 @@ public class UIGuest extends JFrame {
 		filters[3] = new JLabel("Minimum Score");
 		filterText[3] = new JTextField(MAXIMUM_FILTER_INPUT);
 		
+		//Add the filter boxes to the panel
 		for(int i = 0; i < 4; i++)
 		{
 			filterPanel.add(filters[i]);
 			filterPanel.add(filterText[i]);
 		}
 
-		// Make the data display panel
+		// Set display to default
 		this.setDataReviews();
-//		dataTable = new
+		
 		// Make the interaction panel
 		JPanel interactionPanel = new JPanel();
+		
+		// Make interaction panel buttons
 		JButton refreshButton = new JButton("REFRESH TABLE");
 		refreshButton.addActionListener(new RefreshListener());
 		interactionPanel.add(refreshButton);
 		JButton csvButton = new JButton("GENERATE CSV REPORT");
 		csvButton.addActionListener(new CSVListener());
 		interactionPanel.add(csvButton);
+		
 		// Put all the panels in the frame
-
 		add(headerPanel, BorderLayout.NORTH);
-
 		add(filterPanel, BorderLayout.WEST);
-
 		add(interactionPanel, BorderLayout.SOUTH);
+		
+		// Make sure it all fits
 		this.pack();
 	}
-
-	public void setVisibility(boolean visible) {
-		this.setVisible(visible);
-	}
 	
+	
+	//Logic for setting getting 'Reviews' data
 	private String[] dataReviewFilters = {"Reviewer", "DBMS", "Company", "Minimum Score"};
 	private void setDataReviews() {
 		setTextBoxTypes(dataReviewFilters);
@@ -139,6 +151,7 @@ public class UIGuest extends JFrame {
 		this.setTableData(data, cols);
 	}
 	
+	//Logic for getting 'DBMS' data
 	private String[] DBMSFilters = {"Company", "Minimum Score"};
 	private void setDataDBMS() {
 		setTextBoxTypes(DBMSFilters);
@@ -163,6 +176,7 @@ public class UIGuest extends JFrame {
 		this.setTableData(data, cols);
 	}
 	
+	//Logic for getting 'Companies' data
 	private String[] CompaniesFilter = {"DBMS Used", "DBMS Created"};
 	private void setDataCompanies() {
 		setTextBoxTypes(CompaniesFilter);
@@ -186,6 +200,7 @@ public class UIGuest extends JFrame {
 		this.setTableData(data, cols);
 	}
 	
+	//Set filter boxes to correct types
 	private void setTextBoxTypes(String[] filterStrings)
 	{
 		for(int i = 0; i < 4; i++)
@@ -208,6 +223,7 @@ public class UIGuest extends JFrame {
 		}
 	}
 	
+	//Set our table's data
 	private void setTableData(String[][] data, String[] cols)
 	{
 		int numCols = cols.length;
@@ -222,6 +238,9 @@ public class UIGuest extends JFrame {
 		this.pack();
 	}
 
+	//Button Interactions
+	
+	//CSV button
 	class CSVListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
@@ -229,12 +248,12 @@ public class UIGuest extends JFrame {
 
 		}
 	}
-
+	
+	//Refresh button
 	class RefreshListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			String selected = reportTypes.getSelectedItem().toString();
-//			System.out.println("REFRESH " + selected);
 
 			if(selected.equals("Reviews"))
 			{
