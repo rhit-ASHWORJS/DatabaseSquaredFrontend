@@ -15,17 +15,24 @@ import java.util.Vector;
 import java.sql.Date;
 
 public class UIReviewList extends JFrame {
-	
-	JScrollPane dataPane;
-	JTable dataTable;
+	//DB interaction
 	FullCRUD fc;
-	JComboBox reviewListSelections;
+
+	//Current User
 	String username;
 	
+	//UI Elements
+	JScrollPane dataPane;
+	JTable dataTable;
+	JComboBox reviewListSelections;
+	
+	//Data options for dropdown
 	String[] dataViewOptions = {"Reviews", "DBMS", "Companies"};
 
+	//Maximum allowed length of text box entry
 	public static final int MAXIMUM_FILTER_INPUT = 20;
 	UIReviewList(FullCRUD fc, String username) {
+		//Make the UI look okay
 		try
         {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
@@ -36,6 +43,7 @@ public class UIReviewList extends JFrame {
             e.printStackTrace();
         }   
 		
+		//Save DB interaction & set screen size
 		this.username = username;
 		this.fc = fc;
 		this.setSize(800, 550);
@@ -43,12 +51,16 @@ public class UIReviewList extends JFrame {
 
 		// Make the header panel
 		JPanel headerPanel = new JPanel(new GridLayout(1, 2));
+		
+		//Make current user & current view labels for header
 		JLabel currentUserLabel = new JLabel();
 		currentUserLabel.setText("Current User: " + username);
 		currentUserLabel.setFont(new Font("Serif", Font.PLAIN, 20));
 		JLabel currentViewLabel = new JLabel();
 		currentViewLabel.setText("Current View: Review Lists View");
 		currentViewLabel.setFont(new Font("Serif", Font.PLAIN, 20));
+		
+		//Add labels to header
 		headerPanel.add(currentUserLabel);
 		headerPanel.add(currentViewLabel);
 		headerPanel.setBackground(Color.gray);
@@ -56,65 +68,64 @@ public class UIReviewList extends JFrame {
 		// Make the filter panel
 		JPanel filterPanel = new JPanel(new GridLayout(12, 1));
 		filterPanel.setBorder(new EmptyBorder(0,20,0,20));
+		
+		//Make the filter panel label
 		JLabel filtersLabel = new JLabel("Filters:");
 		filtersLabel.setFont(new Font("Serif", Font.PLAIN, 20));
 		filterPanel.add(filtersLabel);
 		
+		//Make the Review List Selector Box
 		filterPanel.add(new JLabel("Review List Selector"));
 		reviewListSelections = new JComboBox(getMyReviewLists());
 		filterPanel.add(reviewListSelections);
-		
-//		filterPanel.add(new JLabel("Company"));
-//		filterPanel.add(new JTextField(MAXIMUM_FILTER_INPUT));
-//		filterPanel.add(new JLabel("Reviewer"));
-//		filterPanel.add(new JTextField(MAXIMUM_FILTER_INPUT));
-//		filterPanel.add(new JLabel("Minimum Score"));
-//		filterPanel.add(new JTextField(MAXIMUM_FILTER_INPUT));
 
-		// Make the data display panel
+		//Set default data
 		this.setDataReviewList();
-//		dataTable = new
+
 		// Make the interaction panel
 		JPanel interactionPanel = new JPanel();
+		
+		//Make the buttons for the interaction panel
 		JButton refreshButton = new JButton("REFRESH TABLE");
 		refreshButton.addActionListener(new RefreshListener());
 		interactionPanel.add(refreshButton);
+		
 		JButton csvButton = new JButton("GENERATE CSV REPORT");
 		csvButton.addActionListener(new CSVListener());
 		interactionPanel.add(csvButton);
+		
 		JButton createReviewButton = new JButton("CREATE REVIEW LIST");
 		createReviewButton.addActionListener(new CreateReviewListener());
 		interactionPanel.add(createReviewButton);
+		
 		JButton editReviewButton = new JButton("EDIT REVIEW LIST");
 		editReviewButton.addActionListener(new EditReviewListener());
 		interactionPanel.add(editReviewButton);
+		
 		JButton deleteListButton = new JButton("DELETE REVIEW LIST");
 		deleteListButton.addActionListener(new DeleteReviewListener());
 		interactionPanel.add(deleteListButton);
 		
 		// Put all the panels in the frame
-
 		add(headerPanel, BorderLayout.NORTH);
-
 		add(filterPanel, BorderLayout.WEST);
-
 		add(interactionPanel, BorderLayout.SOUTH);
+		
+		//Make sure everything fits in the frame
 		this.pack();
 	}
-
-	public void setVisibility(boolean visible) {
-		this.setVisible(visible);
-	}
 	
-	
+	//Logic for getting data of review lists
 	private void setDataReviewList() {
 		String[] cols = fc.getReviewListHeader;
 		ArrayList<ArrayList<String>> reviewsData = fc.getReviewList(username);
+		
 		//One-line Arraylist to string conversion found here: https://stackoverflow.com/questions/10043209/convert-arraylist-into-2d-array-containing-varying-lengths-of-arrays
 		String[][] data = reviewsData.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
 		this.setTableData(data, cols);
 	}
 	
+	//Logic for getting a array of strings of review lists (used to update dropdown)
 	private String[] getMyReviewLists() {
 		String[] cols = fc.getReviewListHeader;
 		ArrayList<ArrayList<String>> reviewsData = fc.getReviewList(username);
@@ -133,10 +144,12 @@ public class UIReviewList extends JFrame {
 		return myReviewLists;
 	}
 	
+	//Refreshes User Interface
 	private void refreshUI() {
 		this.pack();
 	}
 	
+	//Sets the data on the table
 	private void setTableData(String[][] data, String[] cols)
 	{
 		int numCols = cols.length;
@@ -152,11 +165,14 @@ public class UIReviewList extends JFrame {
 		this.pack();
 	}
 	
+	//Updates the drop-down box
 	private void updateComboBox() {
 		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(getMyReviewLists());
 		reviewListSelections.setModel(model);
 	}
 
+	//Button logic
+	//CSV button
 	class CSVListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
@@ -165,6 +181,7 @@ public class UIReviewList extends JFrame {
 		}
 	}
 
+	//Refresh button
 	class RefreshListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
@@ -172,6 +189,7 @@ public class UIReviewList extends JFrame {
 		}
 	}
 	
+	//Create button
 	class CreateReviewListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
@@ -181,6 +199,7 @@ public class UIReviewList extends JFrame {
 		}
 	}
 	
+	//Edit button
 	class EditReviewListener implements ActionListener {
 
 		@Override
@@ -191,6 +210,7 @@ public class UIReviewList extends JFrame {
 		
 	}
 	
+	//Delete button
 	class DeleteReviewListener implements ActionListener {
 
 		@Override

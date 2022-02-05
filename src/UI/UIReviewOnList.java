@@ -15,18 +15,23 @@ import java.util.Vector;
 import java.sql.Date;
 
 public class UIReviewOnList extends JFrame {
-	
+	//DB interaction
+	FullCRUD fc;
+
+	//UI Elements
 	JScrollPane dataPane;
 	JTable dataTable;
-	FullCRUD fc;
 	JComboBox reviewListSelections;
 	String username;
 	String reviewListName;
 	
+	//Data options for dropdown
 	String[] dataViewOptions = {"Reviews", "DBMS", "Companies"};
 
+	//Maximum allowed length of text box entry
 	public static final int MAXIMUM_FILTER_INPUT = 20;
 	UIReviewOnList(FullCRUD fc, String username, String reviewListName) {
+		//Make the UI look okay
 		try
         {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
@@ -37,20 +42,25 @@ public class UIReviewOnList extends JFrame {
             e.printStackTrace();
         }   
 		
+		//Save DB interaction & set screen size
 		this.username = username;
-		this.fc = fc;
 		this.reviewListName = reviewListName;
+		this.fc = fc;
 		this.setSize(800, 550);
 		this.setTitle("Reviewer View");
 
 		// Make the header panel
 		JPanel headerPanel = new JPanel(new GridLayout(1, 2));
+		
+		//Make current user & current view labels for header
 		JLabel currentUserLabel = new JLabel();
 		currentUserLabel.setText("Current User: " + username);
 		currentUserLabel.setFont(new Font("Serif", Font.PLAIN, 20));
 		JLabel currentViewLabel = new JLabel();
 		currentViewLabel.setText("Current View: Review List "+reviewListName+" View");
 		currentViewLabel.setFont(new Font("Serif", Font.PLAIN, 20));
+		
+		//Add labels to header
 		headerPanel.add(currentUserLabel);
 		headerPanel.add(currentViewLabel);
 		headerPanel.setBackground(Color.gray);
@@ -58,6 +68,8 @@ public class UIReviewOnList extends JFrame {
 		// Make the filter panel
 		JPanel filterPanel = new JPanel(new GridLayout(12, 1));
 		filterPanel.setBorder(new EmptyBorder(0,20,0,20));
+		
+		//Make the filter panel label
 		JLabel filtersLabel = new JLabel("Filters:");
 		filtersLabel.setFont(new Font("Serif", Font.PLAIN, 20));
 		filterPanel.add(filtersLabel);
@@ -65,37 +77,34 @@ public class UIReviewOnList extends JFrame {
 		filterPanel.add(new JLabel("Review Selector"));
 		reviewListSelections = new JComboBox(getMyReviewsOnLists());
 		filterPanel.add(reviewListSelections);
-//		filterPanel.add(new JLabel("Company"));
-//		filterPanel.add(new JTextField(MAXIMUM_FILTER_INPUT));
-//		filterPanel.add(new JLabel("Reviewer"));
-//		filterPanel.add(new JTextField(MAXIMUM_FILTER_INPUT));
-//		filterPanel.add(new JLabel("Minimum Score"));
-//		filterPanel.add(new JTextField(MAXIMUM_FILTER_INPUT));
 
-		// Make the data display panel
+
+		// Set display to default
 		this.setDataReviewOnList();
-//		dataTable = new
+
 		// Make the interaction panel
 		JPanel interactionPanel = new JPanel();
+		
+		// Make interaction panel buttons
 		JButton refreshButton = new JButton("REFRESH TABLE");
 		refreshButton.addActionListener(new RefreshListener());
 		interactionPanel.add(refreshButton);
+		
 		JButton csvButton = new JButton("GENERATE CSV REPORT");
 		csvButton.addActionListener(new CSVListener());
 		interactionPanel.add(csvButton);
+		
 		JButton createReviewButton = new JButton("CREATE REVIEW");
 		createReviewButton.addActionListener(new CreateReviewListener());
 		interactionPanel.add(createReviewButton);
+		
 		JButton deleteListButton = new JButton("DELETE REVIEW");
 		deleteListButton.addActionListener(new DeleteReviewListener());
 		interactionPanel.add(deleteListButton);
 		
 		// Put all the panels in the frame
-
 		add(headerPanel, BorderLayout.NORTH);
-
 		add(filterPanel, BorderLayout.WEST);
-
 		add(interactionPanel, BorderLayout.SOUTH);
 		this.pack();
 	}

@@ -116,7 +116,7 @@ public class UIGuest extends JFrame {
 	}
 	
 	
-	//Logic for setting getting 'Reviews' data
+	//Logic for getting 'Reviews' data
 	private String[] dataReviewFilters = {"Reviewer", "DBMS", "Company", "Minimum Score"};
 	private void setDataReviews() {
 		setTextBoxTypes(dataReviewFilters);

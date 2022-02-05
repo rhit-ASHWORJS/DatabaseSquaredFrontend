@@ -34,7 +34,7 @@ class UILogin extends JFrame
             e.printStackTrace();
         }   
     	
-    	//Save DB interaction & sec screen size
+    	//Save DB interaction & set screen size
     	this.fc = fc;
     	this.lr = lr;
     	this.setSize(300,200);
@@ -96,7 +96,7 @@ class UILogin extends JFrame
     		if(login == 0)
     		{
     			UIReviewer ui = new UIReviewer(fc, UsernameField.getText());
-    			ui.setVisibility(true);
+    			ui.setVisible(true);
     			
     			//Get rid of this window
     			setVisible(false);
@@ -136,7 +136,7 @@ class UILogin extends JFrame
 	    		if(success == 0)
 	    		{
 	    			UIReviewer ui = new UIReviewer(fc, UsernameField.getText());
-	        		ui.setVisibility(true);
+	        		ui.setVisible(true);
 	        		setVisible(false);
 	    		}
     		}
