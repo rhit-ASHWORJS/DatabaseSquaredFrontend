@@ -29,19 +29,20 @@ public class LoginRegister {
 	 * 
 	 * @param username
 	 * @param password
-	 * @return 0: if successful, -1 if error or fail
+	 * @return 0: if successful, -1 if error or fail, 1 if they are an admin
 	 */
 	public int login(String username, String password) {
 		try {
-			PreparedStatement stmt = this.dbService.getConnection().prepareStatement("Select Salt, PasswordHash \n From [Reviewer] \n where Username = ?");
+			PreparedStatement stmt = this.dbService.getConnection().prepareStatement("Select Salt, PasswordHash,IsAdmin \n From [Reviewer] \n where Username = ?");
 			stmt.setString(1, username);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				byte[] salt = rs.getBytes(1);
 				String dbHash = rs.getString(2);
+				int isAdmid = rs.getInt(3);
 				String hash = hashPassword(salt,password);
 				if(hash.compareTo(dbHash) == 0) {
-					return 0;
+					return isAdmid;
 				}
 				
 			}

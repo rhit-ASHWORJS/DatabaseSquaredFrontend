@@ -101,6 +101,12 @@ class UILogin extends JFrame
     			
     			//Get rid of this window
     			setVisible(false);
+    		}else if (login == 1) {
+    			UIAdmin ui = new UIAdmin(fc, UsernameField.getText());
+    			ui.setVisible(true);
+    			
+    			//Get rid of this window
+    			setVisible(false);
     		}
     	}
     }
