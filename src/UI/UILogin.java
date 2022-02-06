@@ -23,6 +23,7 @@ class UILogin extends JFrame
       
     UILogin(FullCRUD fc, LoginRegister lr)  
     {     
+    	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	//Make the UI look okay
     	try
         {
@@ -116,9 +117,10 @@ class UILogin extends JFrame
     		try {
     			yoe = Integer.parseInt(input);
     		}
-    		catch(Exception E) {
-    			//They entered a invalid # of years
-    		}
+			catch(NumberFormatException e)
+			{
+				JOptionPane.showMessageDialog(null, "Please enter a correctly formatted number");
+			}
     		
     		if(yoe > -1)
     		{

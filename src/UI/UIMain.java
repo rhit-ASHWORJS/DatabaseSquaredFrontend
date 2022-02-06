@@ -26,6 +26,7 @@ public class UIMain {
 		//There's two different paths a user can take here: Guest (no login) or Reviewer (login)
 		//We start by asking if they want to login as a reviewer
 		
+		Runtime.getRuntime().addShutdownHook(new Thread(new Shutdown()));
 		//Get the user's choice
 		int result = JOptionPane.showConfirmDialog(null, "Would you like to login as a Reviewer?");
 		
@@ -48,5 +49,16 @@ public class UIMain {
 	        	System.out.println("Closed the option pane");
 	        break;
 		}
+	}
+	
+	class Shutdown implements Runnable {
+
+		@Override
+		public void run() {
+			System.out.println("Closing connection..");
+			fc.closeConnection();
+			System.out.println("Closed connection");
+		}
+		
 	}
 }

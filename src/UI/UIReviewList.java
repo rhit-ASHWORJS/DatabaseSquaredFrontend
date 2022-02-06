@@ -8,6 +8,9 @@ import CRUD.FullCRUD;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.lang.Exception;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,6 +28,7 @@ public class UIReviewList extends JFrame {
 	JScrollPane dataPane;
 	JTable dataTable;
 	JComboBox reviewListSelections;
+	CSVListener csvListener;
 	
 	//Data options for dropdown
 	String[] dataViewOptions = {"Reviews", "DBMS", "Companies"};
@@ -42,6 +46,8 @@ public class UIReviewList extends JFrame {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }   
+		
+		csvListener = new CSVListener(this, null);
 		
 		//Save DB interaction & set screen size
 		this.username = username;
@@ -91,7 +97,7 @@ public class UIReviewList extends JFrame {
 		interactionPanel.add(refreshButton);
 		
 		JButton csvButton = new JButton("GENERATE CSV REPORT");
-		csvButton.addActionListener(new CSVListener());
+		csvButton.addActionListener(csvListener);
 		interactionPanel.add(csvButton);
 		
 		JButton createReviewButton = new JButton("CREATE REVIEW LIST");
@@ -121,8 +127,15 @@ public class UIReviewList extends JFrame {
 		ArrayList<ArrayList<String>> reviewsData = fc.getReviewList(username);
 		
 		//One-line Arraylist to string conversion found here: https://stackoverflow.com/questions/10043209/convert-arraylist-into-2d-array-containing-varying-lengths-of-arrays
-		String[][] data = reviewsData.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
-		this.setTableData(data, cols);
+		if(reviewsData != null)
+		{
+			String[][] data = reviewsData.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
+			this.setTableData(data, cols);
+		}
+		else
+		{
+			this.setTableData(new String[0][0], new String[0]);
+		}
 	}
 	
 	//Logic for getting a array of strings of review lists (used to update dropdown)
@@ -160,6 +173,7 @@ public class UIReviewList extends JFrame {
 		dataTable = new JTable(data, cols);
 		dataPane = new JScrollPane(dataTable);
 		dataTable.setFillsViewportHeight(true);
+		csvListener.setTable(dataTable);
 		add(dataPane, BorderLayout.EAST);
 		updateComboBox();
 		this.pack();
@@ -172,14 +186,6 @@ public class UIReviewList extends JFrame {
 	}
 
 	//Button logic
-	//CSV button
-	class CSVListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			System.out.println("CSV");
-
-		}
-	}
 
 	//Refresh button
 	class RefreshListener implements ActionListener {
@@ -204,6 +210,11 @@ public class UIReviewList extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			if((String) reviewListSelections.getSelectedItem() == null)
+			{
+				JOptionPane.showMessageDialog(null, "You must select a review list to edit");
+				return;
+			}
 			UIReviewOnList ui = new UIReviewOnList(fc, username, (String) reviewListSelections.getSelectedItem());
 			ui.setVisibility(true);
 		}
@@ -215,6 +226,11 @@ public class UIReviewList extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			if((String) reviewListSelections.getSelectedItem() == null)
+			{
+				JOptionPane.showMessageDialog(null, "You must select a review list to edit");
+				return;
+			}
 			String listToDelete = (String) reviewListSelections.getSelectedItem();
 			fc.deleteReviewList(username, listToDelete);
 			setDataReviewList();

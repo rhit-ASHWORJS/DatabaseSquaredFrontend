@@ -8,6 +8,9 @@ import CRUD.FullCRUD;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.lang.Exception;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,6 +27,7 @@ public class UIReviewOnList extends JFrame {
 	JComboBox reviewListSelections;
 	String username;
 	String reviewListName;
+	CSVListener csvListener;
 	
 	//Data options for dropdown
 	String[] dataViewOptions = {"Reviews", "DBMS", "Companies"};
@@ -41,6 +45,8 @@ public class UIReviewOnList extends JFrame {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }   
+		
+		csvListener = new CSVListener(this, null);
 		
 		//Save DB interaction & set screen size
 		this.username = username;
@@ -91,7 +97,7 @@ public class UIReviewOnList extends JFrame {
 		interactionPanel.add(refreshButton);
 		
 		JButton csvButton = new JButton("GENERATE CSV REPORT");
-		csvButton.addActionListener(new CSVListener());
+		csvButton.addActionListener(csvListener);
 		interactionPanel.add(csvButton);
 		
 		JButton createReviewButton = new JButton("CREATE REVIEW");
@@ -117,9 +123,16 @@ public class UIReviewOnList extends JFrame {
 	private void setDataReviewOnList() {
 		String[] cols = fc.getFilteredReviewsHeader;
 		ArrayList<ArrayList<String>> reviewsData = fc.filterReviews(username, null, null, -1, reviewListName);
-		//One-line Arraylist to string conversion found here: https://stackoverflow.com/questions/10043209/convert-arraylist-into-2d-array-containing-varying-lengths-of-arrays
-		String[][] data = reviewsData.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
-		this.setTableData(data, cols);
+		if(reviewsData != null)
+		{
+			//One-line Arraylist to string conversion found here: https://stackoverflow.com/questions/10043209/convert-arraylist-into-2d-array-containing-varying-lengths-of-arrays
+			String[][] data = reviewsData.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
+			this.setTableData(data, cols);
+		}
+		else
+		{
+			this.setTableData(new String[0][0], new String[0]);
+		}
 	}
 	
 	private String[] getMyReviewsOnLists() {
@@ -154,6 +167,7 @@ public class UIReviewOnList extends JFrame {
 		dataTable = new JTable(data, cols);
 		dataPane = new JScrollPane(dataTable);
 		dataTable.setFillsViewportHeight(true);
+		csvListener.setTable(dataTable);
 		add(dataPane, BorderLayout.EAST);
 		updateComboBox();
 		this.pack();
@@ -162,14 +176,6 @@ public class UIReviewOnList extends JFrame {
 	private void updateComboBox() {
 		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(getMyReviewsOnLists());
 		reviewListSelections.setModel(model);
-	}
-
-	class CSVListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			System.out.println("CSV");
-
-		}
 	}
 
 	class RefreshListener implements ActionListener {

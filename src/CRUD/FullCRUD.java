@@ -34,7 +34,10 @@ public class FullCRUD {
 		this.reviewList = new ReviewListCRUD(dbService);
 		this.filters = new FilterCRUD(dbService);
 	}
-
+	
+	public void closeConnection() {
+		dbService.closeConnection();
+	}
 	/**
 	 * Add a company to the database
 	 * 
