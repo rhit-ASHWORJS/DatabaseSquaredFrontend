@@ -4,26 +4,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.sql.Date;
 import java.util.Scanner;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
+
+
+import CRUD.FullCRUD;
 
 public class ImportListener  implements ActionListener {
 	JFrame frame;
-	File f;
-	public ImportListener(JFrame frame, File f)
+	private FullCRUD fc = null;
+	public ImportListener(JFrame frame, FullCRUD fc)
 	{
 		this.frame = frame;
-		this.f = f;
-	}
-	
-	public void setFile(File f)
-	{
-		this.f = f;
+		this.fc = fc;
 	}
 
 	@Override
@@ -44,8 +40,15 @@ public class ImportListener  implements ActionListener {
             try {
 				Scanner reader = new Scanner(file);
 				while(reader.hasNext()) {
-					System.out.println(reader.nextLine());
+					String nl = reader.nextLine();
+					System.out.println(nl);
+					
+					String[] vals  = nl.split(",", -1);
+					this.fc.addImportRow(vals[0],vals[1],vals[2],Date.valueOf(vals[3]),Integer.parseInt(vals[4]),vals[5],Integer.parseInt(vals[6]),Date.valueOf(vals[7]),vals[8],vals[9],Date.valueOf(vals[10]),vals[11]);
+					
+					
 				}
+				reader.close();
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

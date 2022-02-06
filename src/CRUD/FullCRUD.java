@@ -22,6 +22,7 @@ public class FullCRUD {
 	private ReviewerCRUD reviewer;
 	private ReviewListCRUD reviewList;
 	private FilterCRUD filters;
+	private CVSImportCRUD cvsImport;
 
 	public FullCRUD(DatabaseConnectionService dbService) {
 		this.dbService = dbService;
@@ -33,11 +34,13 @@ public class FullCRUD {
 		this.reviewer = new ReviewerCRUD(dbService);
 		this.reviewList = new ReviewListCRUD(dbService);
 		this.filters = new FilterCRUD(dbService);
+		this.cvsImport = new CVSImportCRUD(dbService);
 	}
-	
+
 	public void closeConnection() {
 		dbService.closeConnection();
 	}
+
 	/**
 	 * Add a company to the database
 	 * 
@@ -291,10 +294,11 @@ public class FullCRUD {
 	 * @param DBMS
 	 * @param company
 	 * @param score    -1 for null
-	 * @param RLname 
+	 * @param RLname
 	 * @return String list of the table, null if there is an error
 	 */
-	public ArrayList<ArrayList<String>> filterReviews(String reviewer, String DBMS, String company, int score, String RLname) {
+	public ArrayList<ArrayList<String>> filterReviews(String reviewer, String DBMS, String company, int score,
+			String RLname) {
 		return this.filters.parceFilteredReviews(this.filters.filterReviews(reviewer, DBMS, company, score, RLname));
 	}
 
@@ -323,5 +327,22 @@ public class FullCRUD {
 	public ArrayList<ArrayList<String>> filterCompanies(String usedDBMS, String madeDBMS) {
 		return this.filters.parceFilteredCompanies(this.filters.filterCompanies(usedDBMS, madeDBMS));
 	}
-
+	/**
+	 * 
+	 * @param dbName
+	 * @param DBMSName
+	 * @param desc
+	 * @param dbDate
+	 * @param numOfTables
+	 * @param comapanyName
+	 * @param numEmployees
+	 * @param conpDate
+	 * @param DBMSLang
+	 * @param DBMSType
+	 * @param DBMSDate
+	 * @param DBMSManf
+	 */
+	public void addImportRow(String dbName, String DBMSName, String desc, Date dbDate, int numOfTables, String comapanyName, int numEmployees, Date conpDate, String DBMSLang, String DBMSType, Date DBMSDate, String DBMSManf) {
+		this.cvsImport.addRow(dbName,DBMSName,desc,dbDate,numOfTables,comapanyName,numEmployees,conpDate,DBMSLang,DBMSType,DBMSDate,DBMSManf);		
+	}
 }

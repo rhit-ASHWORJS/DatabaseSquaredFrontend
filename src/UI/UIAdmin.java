@@ -48,7 +48,7 @@ public class UIAdmin extends JFrame {
 		}
 
 		csvListener = new CSVListener(this, null);
-		importListener = new ImportListener(this, null);
+		importListener = new ImportListener(this, fc);
 
 		// Save DB interaction & set screen size
 		this.username = username;
