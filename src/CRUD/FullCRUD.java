@@ -342,7 +342,7 @@ public class FullCRUD {
 	 * @param DBMSDate
 	 * @param DBMSManf
 	 */
-	public void addImportRow(String dbName, String DBMSName, String desc, Date dbDate, int numOfTables, String comapanyName, int numEmployees, Date conpDate, String DBMSLang, String DBMSType, Date DBMSDate, String DBMSManf) {
-		this.cvsImport.addRow(dbName,DBMSName,desc,dbDate,numOfTables,comapanyName,numEmployees,conpDate,DBMSLang,DBMSType,DBMSDate,DBMSManf);		
+	public void addImportRow(String dbName, String DBMSName, String desc, Date dbDate, int numOfTables, String comapanyName, int numEmployees, Date conpDate, String DBMSLang, String DBMSType, Date DBMSDate, String DBMSManf,int manfEmployees, Date manfDate) {
+		this.cvsImport.addRow(dbName,DBMSName,desc,dbDate,numOfTables,comapanyName,numEmployees,conpDate,DBMSLang,DBMSType,DBMSDate,DBMSManf,manfEmployees,manfDate);		
 	}
 }

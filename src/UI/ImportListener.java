@@ -44,7 +44,7 @@ public class ImportListener  implements ActionListener {
 					System.out.println(nl);
 					
 					String[] vals  = nl.split(",", -1);
-					this.fc.addImportRow(vals[0],vals[1],vals[2],Date.valueOf(vals[3]),Integer.parseInt(vals[4]),vals[5],Integer.parseInt(vals[6]),Date.valueOf(vals[7]),vals[8],vals[9],Date.valueOf(vals[10]),vals[11]);
+					this.fc.addImportRow(vals[0],vals[1],vals[2],Date.valueOf(vals[3]),Integer.parseInt(vals[4]),vals[5],Integer.parseInt(vals[6]),Date.valueOf(vals[7]),vals[8],vals[9],Date.valueOf(vals[10]),vals[11],Integer.parseInt(vals[12]),Date.valueOf(vals[13]));
 					
 					
 				}
