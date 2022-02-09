@@ -30,7 +30,7 @@ public class UIAdmin extends JFrame {
 	JTextField[] filterText = new JTextField[4];
 	CSVListener csvListener;
 	ImportListener importListener;
-
+	AdminCVSListener adminExport;
 	// Data options for dropdown
 	String[] dataViewOptions = { "Reviews", "DBMS", "Companies" };
 
@@ -49,7 +49,7 @@ public class UIAdmin extends JFrame {
 
 		csvListener = new CSVListener(this, null);
 		importListener = new ImportListener(this, fc);
-
+		adminExport = new AdminCVSListener(this, null, fc);
 		// Save DB interaction & set screen size
 		this.username = username;
 		this.fc = fc;
@@ -118,6 +118,9 @@ public class UIAdmin extends JFrame {
 		JButton importButton = new JButton("IMPORT CSV");
 		importButton.addActionListener(importListener);
 		interactionPanel.add(importButton);
+		JButton adminExportButton = new JButton("EXPORT ADMIN CSV");
+		adminExportButton.addActionListener(adminExport);
+		interactionPanel.add(adminExportButton);
 		JButton viewReviewListsButton = new JButton("VIEW MY REVIEW LISTS");
 		viewReviewListsButton.addActionListener(new ReviewListsListener());
 		interactionPanel.add(viewReviewListsButton);
