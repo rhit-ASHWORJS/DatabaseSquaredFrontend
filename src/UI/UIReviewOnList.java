@@ -2,20 +2,13 @@ package UI;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.TableColumn;
 
 import CRUD.FullCRUD;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.lang.Exception;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Vector;
-import java.sql.Date;
 
 public class UIReviewOnList extends JFrame {
 	//DB interaction
@@ -188,10 +181,24 @@ public class UIReviewOnList extends JFrame {
 	class CreateReviewListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-//			String input = JOptionPane.showInputDialog("Enter Name For New Review List");
-//			fc.addReviewList(username, input, new Date(Calendar.getInstance().getTimeInMillis()));
-//			setDataReviewOnList();
-			System.out.println("Create");
+			ArrayList<ArrayList<String>> DBMSdata = fc.filterDBMS(null, -1);
+			String[] DBMSs = new String[DBMSdata.size()];
+			for(int i=0; i<DBMSdata.size(); i++)
+				DBMSs[i] = DBMSdata.get(i).get(0);
+			
+			String DBMS = (String)JOptionPane.showInputDialog(null, "Choose Which DBMS to Review", 
+					"Choose DBMS to review", JOptionPane.QUESTION_MESSAGE, null, DBMSs, DBMSs[0]);
+			
+			String score_str = JOptionPane.showInputDialog("Select a score from 0-100");
+			
+			if (score_str == null) return;
+			
+			int score = Integer.parseInt(score_str);
+			
+			String reviewText = JOptionPane.showInputDialog("(Optional) Add a Description");
+			
+			fc.addReview(username, reviewListName, DBMS, score, reviewText);
+			setDataReviewOnList();
 		}
 	}
 	
@@ -199,10 +206,13 @@ public class UIReviewOnList extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-//			String listToDelete = (String) reviewListSelections.getSelectedItem();
-//			fc.deleteReviewList(username, listToDelete);
-//			setDataReviewOnList();
-			System.out.println("Delete");
+			String[] DBMSs = getMyReviewsOnLists();
+
+			String DBMS = (String)JOptionPane.showInputDialog(null, "Choose Which Review to Delete", 
+					"Choose review to delete", JOptionPane.QUESTION_MESSAGE, null, DBMSs, DBMSs[0]);
+			
+			fc.deleteReview(username, reviewListName, DBMS);
+			setDataReviewOnList();
 		}
 		
 	}

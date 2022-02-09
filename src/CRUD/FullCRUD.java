@@ -168,8 +168,8 @@ public class FullCRUD {
 	 *         null, 3:DBMS name is null, 4: already exists, 5:Do not have
 	 *         permission
 	 */
-	public int addReview(String username, String RLID, String DBMS, double score, String reviewText) {
-		return this.review.addReview(username, RLID, DBMS, score, reviewText);
+	public int addReview(String username, String reviewListName, String DBMS, double score, String reviewText) {
+		return this.review.addReview(username, reviewListName, DBMS, score, reviewText);
 	}
 
 	/**
@@ -198,8 +198,8 @@ public class FullCRUD {
 	 *         null, 3:DBMS name is null, 4: does not exists, 5:Do not have
 	 *         permission
 	 */
-	public int deleteReview(String username, String RLID, String DBMS) {
-		return this.review.deleteReview(username, RLID, DBMS);
+	public int deleteReview(String username, String reviewListName, String DBMS) {
+		return this.review.deleteReview(username, reviewListName, DBMS);
 	}
 
 	public String[] getReviewsHeader = { "DBMS", "Score", "Text", "Review List name" };

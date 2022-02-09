@@ -22,7 +22,7 @@ public class ReviewCRUD {
 	 * adds a review to a ReviewList from a user
 	 * 
 	 * @param username
-	 * @param RLID       ReviewList ID
+	 * @param reviewListName
 	 * @param DBMS
 	 * @param score
 	 * @param reviewText can be null
@@ -30,12 +30,12 @@ public class ReviewCRUD {
 	 *         null, 3:DBMS name is null, 4: already exists, 5:Do not have
 	 *         permission
 	 */
-	public int addReview(String username, String RLID, String DBMS, double score, String reviewText) {
+	public int addReview(String username, String reviewListName, String DBMS, double score, String reviewText) {
 		try {
 			CallableStatement cs = dbService.getConnection().prepareCall("{? = call addReview(?,?,?,?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setString(2, username);
-			cs.setString(3, RLID);
+			cs.setString(3, reviewListName);
 			cs.setString(4, DBMS);
 			cs.setDouble(5, score);
 			if (reviewText == null) {
@@ -50,7 +50,7 @@ public class ReviewCRUD {
 				JOptionPane.showMessageDialog(null, "Reviewer username cannot be empty");
 				return 1;
 			case 2:
-				JOptionPane.showMessageDialog(null, "ReviewList ID cannot be empty");
+				JOptionPane.showMessageDialog(null, "ReviewList name cannot be empty");
 				return 2;
 			case 3:
 				JOptionPane.showMessageDialog(null, "DMBS Name cannot be empty");
@@ -75,7 +75,7 @@ public class ReviewCRUD {
 	 * update a review from a reviewer
 	 * 
 	 * @param username
-	 * @param RLID       ReviewList ID
+	 * @param reviewListName
 	 * @param DBMS
 	 * @param score      -1 is null
 	 * @param reviewText can be null
@@ -83,12 +83,12 @@ public class ReviewCRUD {
 	 *         null, 3:DBMS name is null, 4: already exists, 5:Do not have
 	 *         permission
 	 */
-	public int updateReview(String username, String RLID, String DBMS, double score, String reviewText) {
+	public int updateReview(String username, String reviewListName, String DBMS, double score, String reviewText) {
 		try {
 			CallableStatement cs = dbService.getConnection().prepareCall("{? = call updateReview(?,?,?,?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setString(2, username);
-			cs.setString(3, RLID);
+			cs.setString(3, reviewListName);
 			cs.setString(4, DBMS);
 			if (score == -1.0) {
 				cs.setNull(5, Types.NULL);
@@ -107,7 +107,7 @@ public class ReviewCRUD {
 				JOptionPane.showMessageDialog(null, "Reviewer username cannot be empty");
 				return 1;
 			case 2:
-				JOptionPane.showMessageDialog(null, "ReviewList ID cannot be empty");
+				JOptionPane.showMessageDialog(null, "ReviewList name cannot be empty");
 				return 2;
 			case 3:
 				JOptionPane.showMessageDialog(null, "DMBS Name cannot be empty");
@@ -129,18 +129,18 @@ public class ReviewCRUD {
 	 * deletes a review by a user from the database
 	 * 
 	 * @param username
-	 * @param RLID     reviewList ID
+	 * @param reviewListName
 	 * @param DBMS
 	 * @return 0 if successful, -1 if error 1:Reviewer name is null, 2:ListID is
 	 *         null, 3:DBMS name is null, 4: does not exists, 5:Do not have
 	 *         permission
 	 */
-	public int deleteReview(String username, String RLID, String DBMS) {
+	public int deleteReview(String username, String reviewListName, String DBMS) {
 		try {
-			CallableStatement cs = dbService.getConnection().prepareCall("{? = call deleteReview(?)}");
+			CallableStatement cs = dbService.getConnection().prepareCall("{? = call deleteReview(?,?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setString(2, username);
-			cs.setString(3, RLID);
+			cs.setString(3, reviewListName);
 			cs.setString(4, DBMS);
 			cs.execute();
 			int returnValue = cs.getInt(1);
@@ -149,7 +149,7 @@ public class ReviewCRUD {
 				JOptionPane.showMessageDialog(null, "Reviewer username cannot be empty");
 				return 1;
 			case 2:
-				JOptionPane.showMessageDialog(null, "ReviewList ID cannot be empty");
+				JOptionPane.showMessageDialog(null, "ReviewList name cannot be empty");
 				return 2;
 			case 3:
 				JOptionPane.showMessageDialog(null, "DMBS Name cannot be empty");
