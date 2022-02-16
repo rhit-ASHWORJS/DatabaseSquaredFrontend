@@ -55,13 +55,13 @@ class CSVListener implements ActionListener {
 					}
 
 					for (String header : headers) {
-						csvWriter.print(header + ":");
+						csvWriter.print(header + ",");
 					}
 					csvWriter.print("\n");
 
 					for (String[] row : data) {
 						for (String cell : row) {
-							csvWriter.print(cell + ":");
+							csvWriter.print(cell + ",");
 						}
 						csvWriter.print("\n");
 					}
