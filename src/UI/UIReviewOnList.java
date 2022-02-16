@@ -187,13 +187,24 @@ public class UIReviewOnList extends JFrame {
 				DBMSs[i] = DBMSdata.get(i).get(0);
 			
 			String DBMS = (String)JOptionPane.showInputDialog(null, "Choose Which DBMS to Review", 
-					"Choose DBMS to review", JOptionPane.QUESTION_MESSAGE, null, DBMSs, DBMSs[0]);
+					"Choose DBMS to review", JOptionPane.QUESTION_MESSAGE, null, DBMSs, DBMSs[0]);	
+			if (DBMS == null) return;
+			int score = -1;
+			while(score == -1) {
+				
+				String score_str = JOptionPane.showInputDialog("Select a score from 0-100");
+				if (score_str == null) return;
+				System.out.println(score_str);
+				try {
+					score = Integer.parseInt(score_str);		
+					if(score > 100) {
+						score = -1;
+					}
+				}catch(Exception e) {
+				}
+			}
 			
-			String score_str = JOptionPane.showInputDialog("Select a score from 0-100");
 			
-			if (score_str == null) return;
-			
-			int score = Integer.parseInt(score_str);
 			
 			String reviewText = JOptionPane.showInputDialog("(Optional) Add a Description");
 			
@@ -210,7 +221,7 @@ public class UIReviewOnList extends JFrame {
 
 			String DBMS = (String)JOptionPane.showInputDialog(null, "Choose Which Review to Delete", 
 					"Choose review to delete", JOptionPane.QUESTION_MESSAGE, null, DBMSs, DBMSs[0]);
-			
+			if (DBMS == null) return;
 			fc.deleteReview(username, reviewListName, DBMS);
 			setDataReviewOnList();
 		}

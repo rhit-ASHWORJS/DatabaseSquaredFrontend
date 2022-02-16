@@ -200,6 +200,7 @@ public class UIReviewList extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			String input = JOptionPane.showInputDialog("Enter Name For New Review List");
+			if (input == null) return;
 			fc.addReviewList(username, input, new Date(Calendar.getInstance().getTimeInMillis()));
 			setDataReviewList();
 		}
@@ -232,6 +233,7 @@ public class UIReviewList extends JFrame {
 				return;
 			}
 			String listToDelete = (String) reviewListSelections.getSelectedItem();
+			System.out.println(listToDelete);
 			fc.deleteReviewList(username, listToDelete);
 			setDataReviewList();
 		}
