@@ -61,7 +61,7 @@ class CSVListener implements ActionListener {
 
 					for (String[] row : data) {
 						for (String cell : row) {
-							csvWriter.print(cell + ",");
+							csvWriter.print(cell.replace(',', '.') + ",");
 						}
 						csvWriter.print("\n");
 					}
