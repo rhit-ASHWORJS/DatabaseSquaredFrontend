@@ -97,6 +97,10 @@ public class UIReviewOnList extends JFrame {
 		createReviewButton.addActionListener(new CreateReviewListener());
 		interactionPanel.add(createReviewButton);
 		
+		JButton editReviewButton = new JButton("EDIT REVIEW");
+		editReviewButton.addActionListener(new EditReviewListener());
+		interactionPanel.add(editReviewButton);
+		
 		JButton deleteListButton = new JButton("DELETE REVIEW");
 		deleteListButton.addActionListener(new DeleteReviewListener());
 		interactionPanel.add(deleteListButton);
@@ -209,6 +213,34 @@ public class UIReviewOnList extends JFrame {
 			String reviewText = JOptionPane.showInputDialog("(Optional) Add a Description");
 			
 			fc.addReview(username, reviewListName, DBMS, score, reviewText);
+			setDataReviewOnList();
+		}
+	}
+	
+	class EditReviewListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			String BDMS = (String) reviewListSelections.getSelectedItem();
+			int score = -1;
+			while(score == -1) {
+				
+				String score_str = JOptionPane.showInputDialog("Select a score from 0-100");
+				if (score_str == null) return;
+				System.out.println(score_str);
+				try {
+					score = Integer.parseInt(score_str);		
+					if(score > 100) {
+						score = -1;
+					}
+				}catch(Exception e) {
+				}
+			}
+			
+			
+			
+			String reviewText = JOptionPane.showInputDialog("(Optional) Add a Description");
+			
+			fc.updateReview(username, reviewListName, BDMS, score, reviewText);
 			setDataReviewOnList();
 		}
 	}
