@@ -11,9 +11,9 @@ import javax.swing.JOptionPane;
 
 import databasesquared.services.DatabaseConnectionService;
 
-public class CVSImportCRUD {
+public class CSVImportCRUD {
 	private DatabaseConnectionService dbService = null;
-	public CVSImportCRUD(DatabaseConnectionService dbService) {
+	public CSVImportCRUD(DatabaseConnectionService dbService) {
 		this.dbService = dbService;
 		// TODO Auto-generated constructor stub
 	}
@@ -21,7 +21,7 @@ public class CVSImportCRUD {
 	
 	public void addRow(String dbName, String DBMSName, String desc, Date dbDate, int numOfTables, String comapanyName, int numEmployees, Date conpDate, String DBMSLang,String DBMSType, Date DBMSDate, String DBMSManf,int manfEmployees, Date manfDate ) {
 		try {
-			CallableStatement cs = dbService.getConnection().prepareCall("{? = call importCVSLine(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+			CallableStatement cs = dbService.getConnection().prepareCall("{? = call importCSVLine(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setString(2,dbName);
 			cs.setString(3,DBMSName);

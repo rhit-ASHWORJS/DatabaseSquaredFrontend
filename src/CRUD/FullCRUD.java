@@ -22,7 +22,7 @@ public class FullCRUD {
 	private ReviewerCRUD reviewer;
 	private ReviewListCRUD reviewList;
 	private FilterCRUD filters;
-	private CVSImportCRUD cvsImport;
+	private CSVImportCRUD cvsImport;
 
 	public FullCRUD(DatabaseConnectionService dbService) {
 		this.dbService = dbService;
@@ -34,7 +34,7 @@ public class FullCRUD {
 		this.reviewer = new ReviewerCRUD(dbService);
 		this.reviewList = new ReviewListCRUD(dbService);
 		this.filters = new FilterCRUD(dbService);
-		this.cvsImport = new CVSImportCRUD(dbService);
+		this.cvsImport = new CSVImportCRUD(dbService);
 	}
 
 	public void closeConnection() {
