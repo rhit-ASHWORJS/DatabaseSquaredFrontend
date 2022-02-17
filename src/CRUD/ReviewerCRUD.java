@@ -19,7 +19,7 @@ public class ReviewerCRUD {
 	 * @param Username
 	 * @param YoE
 	 * @return 0 if successful, -1 if error
-	 * 1:name is null, 2:Experience is null, 3:already exists 
+	 * 1:name is null, 2:Experience is null, 3:already exists : -2 if they are admin
 	 */
 	public int addReviewer(String Username, Date YoE) {
 		try {
@@ -39,6 +39,8 @@ public class ReviewerCRUD {
 			case 3:
 				JOptionPane.showMessageDialog(null, "Reviewer already exists");
 				return 3;
+			case -2:
+				return -2;
 			default:
 				return 0;
 			}

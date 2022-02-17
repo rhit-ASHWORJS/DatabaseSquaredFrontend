@@ -87,7 +87,6 @@ public class LoginRegister {
 				case 5: 
 					JOptionPane.showMessageDialog(null, "This Username or Password is already taken");
 					return 5;
-				
 				default:
 					return 0;
 				}

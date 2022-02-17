@@ -135,12 +135,19 @@ class UILogin extends JFrame
 	    		int yearStarted = thisYear-yoe;
 	    		
 	    		//Add the reviewer
-	    		fc.addReviewer(UsernameField.getText(), new Date(thisYear, 1, 1));
+	    		int isAdmin = fc.addReviewer(UsernameField.getText(), new Date(thisYear, 1, 1));
 	    		
 	    		//Register the reviewer
 	    		int success = lr.register(UsernameField.getText(), PasswordField.getText());
 	    		
 	    		//If registration was sucessful, login the reviewer
+	    		if(success == 0 && isAdmin == -2) {
+	    			UIAdmin ui = new UIAdmin(fc, UsernameField.getText());
+	    			ui.setVisible(true);
+	    			
+	    			//Get rid of this window
+	    			setVisible(false);
+	    		}else
 	    		if(success == 0)
 	    		{
 	    			UIReviewer ui = new UIReviewer(fc, UsernameField.getText());
