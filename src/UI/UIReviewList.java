@@ -207,6 +207,7 @@ public class UIReviewList extends JFrame {
 	}
 	
 	//Edit button
+	ArrayList<UIReviewOnList> subWindows = new ArrayList<UIReviewOnList>();
 	class EditReviewListener implements ActionListener {
 
 		@Override
@@ -217,6 +218,7 @@ public class UIReviewList extends JFrame {
 				return;
 			}
 			UIReviewOnList ui = new UIReviewOnList(fc, username, (String) reviewListSelections.getSelectedItem());
+			subWindows.add(ui);
 			ui.setVisibility(true);
 		}
 		
@@ -233,6 +235,9 @@ public class UIReviewList extends JFrame {
 				return;
 			}
 			String listToDelete = (String) reviewListSelections.getSelectedItem();
+			for(UIReviewOnList sub : subWindows) {
+				sub.setVisibility(false);
+			}
 			//System.out.println(listToDelete);
 			fc.deleteReviewList(username, listToDelete);
 			setDataReviewList();

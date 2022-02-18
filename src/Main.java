@@ -7,7 +7,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		System.out.println("Connecting...");
-		DatabaseConnectionService test = new DatabaseConnectionService("titan.csse.rose-hulman.edu","DatabaseSquared");
+		DatabaseConnectionService test = new DatabaseConnectionService("titan.csse.rose-hulman.edu","DatabaseSquaredFridayTestTwo");
 		test.connect("dbSquareUser", "ilikedatabases");
 		FullCRUD fc = new FullCRUD(test);
 		LoginRegister lr = new LoginRegister(test);

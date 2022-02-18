@@ -201,7 +201,7 @@ public class UIReviewOnList extends JFrame {
 				//System.out.println(score_str);
 				try {
 					score = Integer.parseInt(score_str);		
-					if(score > 100) {
+					if(score > 100 || score < 0) {
 						score = -1;
 					}
 				}catch(Exception e) {
@@ -230,7 +230,7 @@ public class UIReviewOnList extends JFrame {
 				//System.out.println(score_str);
 				try {
 					score = Integer.parseInt(score_str);		
-					if(score > 100) {
+					if(score > 100 || score < 0) {
 						score = -1;
 					}
 				}catch(Exception e) {

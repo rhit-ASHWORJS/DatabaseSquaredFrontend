@@ -44,7 +44,7 @@ public class ReviewListCRUD {
 				JOptionPane.showMessageDialog(null, "ReviewList name cannot be empty");
 				return -3;
 			case 3:
-				JOptionPane.showMessageDialog(null, "Review List already exists");
+				JOptionPane.showMessageDialog(null, "That review list name is already taken");
 				return -4;
 			default:
 				return cs.getInt(1);
