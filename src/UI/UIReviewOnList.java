@@ -198,7 +198,7 @@ public class UIReviewOnList extends JFrame {
 				
 				String score_str = JOptionPane.showInputDialog("Select a score from 0-100");
 				if (score_str == null) return;
-				System.out.println(score_str);
+				//System.out.println(score_str);
 				try {
 					score = Integer.parseInt(score_str);		
 					if(score > 100) {
@@ -221,12 +221,13 @@ public class UIReviewOnList extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			String BDMS = (String) reviewListSelections.getSelectedItem();
+			if(BDMS == null)return;
 			int score = -1;
 			while(score == -1) {
 				
 				String score_str = JOptionPane.showInputDialog("Select a score from 0-100");
 				if (score_str == null) return;
-				System.out.println(score_str);
+				//System.out.println(score_str);
 				try {
 					score = Integer.parseInt(score_str);		
 					if(score > 100) {
@@ -249,6 +250,8 @@ public class UIReviewOnList extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			String BDMS = (String) reviewListSelections.getSelectedItem();
+			if(BDMS == null)return;
 			String[] DBMSs = getMyReviewsOnLists();
 
 			String DBMS = (String)JOptionPane.showInputDialog(null, "Choose Which Review to Delete", 

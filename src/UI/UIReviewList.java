@@ -233,7 +233,7 @@ public class UIReviewList extends JFrame {
 				return;
 			}
 			String listToDelete = (String) reviewListSelections.getSelectedItem();
-			System.out.println(listToDelete);
+			//System.out.println(listToDelete);
 			fc.deleteReviewList(username, listToDelete);
 			setDataReviewList();
 		}

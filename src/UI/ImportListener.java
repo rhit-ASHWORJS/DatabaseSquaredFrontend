@@ -24,7 +24,7 @@ public class ImportListener  implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		System.out.println("this worked");
+		//System.out.println("this worked");
 		final JFileChooser fc = new JFileChooser();
 		int returnVal = fc.showOpenDialog(this.frame);
 

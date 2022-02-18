@@ -33,7 +33,7 @@ public class ReviewListCRUD {
 			cs.setDate(4, dateCreated);
 //			cs.registerOutParameter(5, Types.INTEGER);
 			
-			System.out.println(cs.toString());
+			
 			cs.execute();
 			int returnValue = cs.getInt(1);
 			switch (returnValue) {
