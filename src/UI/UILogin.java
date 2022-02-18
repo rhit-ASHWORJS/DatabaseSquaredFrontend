@@ -131,11 +131,18 @@ class UILogin extends JFrame
     		if(yoe > -1)
     		{
     			//Find the year they started working
-	    		int thisYear = new Date(Calendar.getInstance().getTimeInMillis()).getYear();
+	    		int thisYear = 2022;//fix ecentually
 	    		int yearStarted = thisYear-yoe;
+	    		if(yearStarted < 1800)
+	    		{
+	    			return;
+	    		}
 	    		
 	    		//Add the reviewer
-	    		int isAdmin = fc.addReviewer(UsernameField.getText(), new Date(thisYear, 1, 1));
+//	    		System.out.println(yearStarted);
+	    		String dateStr = yearStarted + "-01-01";
+//	    		System.out.println(Date.valueOf(dateStr));
+	    		int isAdmin = fc.addReviewer(UsernameField.getText(), Date.valueOf(dateStr));
 	    		
 	    		//Register the reviewer
 	    		int success = lr.register(UsernameField.getText(), PasswordField.getText());
